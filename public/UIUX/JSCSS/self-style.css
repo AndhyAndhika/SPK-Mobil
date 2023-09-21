@@ -1,0 +1,22 @@
+.bg-logoTunas {
+    position: relative;
+    background-image: url("/UIUX/IMG/logo-tunas-blur.webp");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 70%;
+}
+
+.text-align-justify {
+    /* Stil teks yang ingin Anda terapkan */
+    text-align: justify;
+}
+
+.img-gray-filter{
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
+.img-gray-filter:hover{
+    -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
+}
