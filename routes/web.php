@@ -14,21 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('dashboard');
-// });
-
-Route::get('/new', function () {
-    return view('New-Template');
-})->name('newTe');
-
 Route::get('/', [MainController::class, 'index'])->name('index');
-Route::post('/save-rekomendasi', [MainController::class, 'save_rekomendasi'])->name('save_rekomendasi');
-Route::get('/login', [MainController::class, 'login'])->name('login');
 Route::get('/our-product', [MainController::class, 'just_our_product'])->name('our_product');
-Route::get('/our-product/{nama}', [MainController::class, 'our_product'])->name('our_product');
-Route::get('/rekomendasi', [MainController::class, 'rekomendasi'])->name('rekomendasi');
-Route::post('/rekomendasi/simpan', [MainController::class, 'rekomendasi_simpan'])->name('rekomendasi_simpan');
+Route::get('/our-product/{nama}', [MainController::class, 'specific_product'])->name('specific_product');
+Route::post('/save-rekomendasi', [MainController::class, 'save_rekomendasi'])->name('save_rekomendasi');
+
+Route::get('/login', [MainController::class, 'login'])->name('login');
+
+// Route::get('/rekomendasi', [MainController::class, 'rekomendasi'])->name('rekomendasi');
+// Route::post('/rekomendasi/simpan', [MainController::class, 'rekomendasi_simpan'])->name('rekomendasi_simpan');
 
 // public function simpanEdit(Request $request, $id)
 // {

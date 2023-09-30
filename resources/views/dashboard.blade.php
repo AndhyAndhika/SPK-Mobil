@@ -68,11 +68,16 @@
     </div>
 {{-- FOTO FOTO MOBILNYA --}}
     <div class="row justify-content-center">
+        <style>
+            .img-hover:hover {
+                background-color: #6a737bd2;
+            }
+        </style>
         @foreach ($Products as $item)
             <div class="col-12 col-lg-3 mb-3">
                 <div class="card border border-0 mx-auto" style="width: 18rem; height:18rem;" >
                     <a href="{{ url('/our-product'.'/'. $item->nama) }}">
-                        <img src="{{ asset('UIUX/IMG/' . $item->nama . '.webp') }}"  class="card-img-top" alt="{{ asset('UIUX/IMG/' . $item->nama . '.webp') }}">
+                        <img src="{{ asset('UIUX/IMG/' . $item->nama . '.webp') }}"  class="card-img-top img-hover" alt="{{ asset('UIUX/IMG/' . $item->nama . '.webp') }}">
                     </a>
                 </div>
             </div>
@@ -88,61 +93,248 @@
             <div class="card">
                 <div class="card-body">
                     <form action="{{ url('/save-rekomendasi') }}" method="POST" enctype="multipart/form-data" onsubmit="DisabledButtomSubmit()">
-                    {{-- <form enctype="multipart/form-data" onsubmit="SubmitRekomendasi(event)"> --}}
+                        {{-- <form enctype="multipart/form-data" onsubmit="SubmitRekomendasi(event)"> --}}
                         @csrf
                         <div class="row">
+                            {{-- NAMA ANDA --}}
                             <div class="col-12 col-lg-6 mb-lg-3">
                                 <ul>
                                     <li class="fw-bold fs-6">Nama Anda<sup class="text-danger">*</sup></li>
                                     <li class="list-unstyled">
-                                        <input class="form-control" type="text" placeholder="Nama Anda" aria-label="Nama Anda example" required>
+                                        <input class="form-control" type="text" name="nama_anda" placeholder="Nama Anda" aria-label="Nama Anda example" required>
                                     </li>
                                 </ul>
                             </div>
+                            {{-- NOMOR TELPON --}}
                             <div class="col-12 col-lg-6 mb-lg-3">
                                 <ul>
                                     <li class="fw-bold fs-6">Nomor Telp<sup class="text-danger">*</sup></li>
                                     <li class="list-unstyled">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">+62 </span>
-                                            <input type="number" class="form-control" placeholder="No-telp" required>
+                                            <input type="number" name="no_telp" class="form-control" placeholder="No-telp" required>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
+                            {{-- KAPASITAS MESIN --}}
                             <div class="col-12 col-lg-6 mb-lg-3">
                                 <ul>
-                                    <li class="fw-bold fs-6">Pilih mobil yang diinginkan (Pilih 2 mobil)<sup class="text-danger">*</sup></li>
+                                    <li class="fw-bold fs-6"> Kapasitas mesin <sup class="text-danger">*</sup></li>
                                     <li class="list-unstyled">
-                                        <select class="form-select js-example-basic-multiple-limit" name="tipe_mobil[]" id="tipe_mobil" multiple="multiple" required>
-                                            @foreach ($Products as $product)
-                                                <option value="{{ $product->nama }}">Daihatsu {{ $product->nama }}</option>
-                                            @endforeach
+                                        <select class="form-select" name="kapasitas_mesin" id="kapasitas_mesin" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1, 0, 998">998 cc</option>
+                                                <option value="2, 1197, 1198">1197 cc - 1198cc</option>
+                                                <option value="3, 1298, 1329">1298 cc - 1329 cc</option>
+                                                <option value="4, 1945, 1946">1945 cc - 1946 cc</option>
+                                                <option value="5, 2496, 2496">2496 cc</option>
                                         </select>
-                                        <script>
-                                            $(document).ready(function() {
-                                                $('.js-example-basic-multiple-limit').select2({maximumSelectionLength: 2});
-                                            });
-                                        </script>
                                     </li>
                                 </ul>
                             </div>
-                            @foreach ($data as $item)
-                                <?php $itemsArray = explode(', ', $item->jawaban)  ?>
-                                <div class="col-12 col-lg-6 mb-lg-3">
-                                    <ul>
-                                        <li class="fw-bold fs-6"> {{ $item->pertanyaan }} <sup class="text-danger">*</sup></li>
-                                        <li class="list-unstyled">
-                                            <select class="form-select" name="{{ $item->pertanyaan }}" id="cars" required>
-                                                <option value="" disabled selected>-- Pilih --</option>
-                                                @foreach ($itemsArray as $jawab)
-                                                    <option value="{{ $loop->iteration }}">{{ $jawab }}</option>
-                                                @endforeach
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </div>
-                            @endforeach
+                            {{-- KAPASITAS PENUMPANG --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Kapasitas penumpang <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="kapasitas_penumpang" id="kapasitas_penumpang" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <div id="option_kapasitas_penumpang"></div>
+                                                {{-- <option value="1, 2">2 seat</option>
+                                                <option value="2, 3">3 seat</option>
+                                                <option value="3, 5">5 seat</option>
+                                                <option value="4, 7">7 seat</option>
+                                                <option value="5, 8">8 seat</option> --}}
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- PILIHAN MOBIL 2 MOBIL SEKALIGUS --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6">Pilih mobil yang diinginkan (Wajib pilih 2 mobil)<sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <div id="forCheckbox"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- KEAMANAN BERKENDARA --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Keamanan dalam berkendara <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="keamanan_dalam_berkendara" id="keamanan_dalam_berkendara" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">Sangat Tidak Penting</option>
+                                                <option value="2">Tidak Penting</option>
+                                                <option value="3">Penting</option>
+                                                <option value="4">Cukup Penting</option>
+                                                <option value="5">Sangat Penting</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- INTERITOR MOBIL --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Interior mobil <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="interior_mobil" id="interior_mobil" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">Sangat Tidak Penting</option>
+                                                <option value="2">Tidak Penting</option>
+                                                <option value="3">Penting</option>
+                                                <option value="4">Cukup Penting</option>
+                                                <option value="5">Sangat Penting</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- DIMENSI MOBIL --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Dimensi mobil <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="dimensi_mobil" id="dimensi_mobil" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">Kecil</option>
+                                                <option value="2">Sedang</option>
+                                                <option value="3">Cukup Besar</option>
+                                                <option value="4">Besar</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- JUMLAH KEINGINAN EKSTERIOR --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Jumlah keinginan eksterior <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="jumlah_keinginan_eksterior" id="jumlah_keinginan_eksterior" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">&lt; 3 purpose</option>
+                                                <option value="2">8 - 3 purpose</option>
+                                                <option value="3">14 - 9 purpose</option>
+                                                <option value="4">20 - 15 purpose</option>
+                                                <option value="5">&gt; 20 purpose</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- JUMLAH FITUR TAMBAHAN --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Jumlah keinginan fitur tambahan <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="jumlah_keinginan_fitur_tambahan" id="jumlah_keinginan_fitur_tambahan" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">&lt; 3 commodity</option>
+                                                <option value="2">8 - 3 commodity</option>
+                                                <option value="3">14 - 9 commodity</option>
+                                                <option value="4">20 - 15 commodity</option>
+                                                <option value="5">&gt; 20 commodity</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- WARNA MOBIL --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Warna mobil <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="warna_mobil" id="warna_mobil" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">Sangat Tidak Penting</option>
+                                                <option value="2">Tidak Penting</option>
+                                                <option value="3">Penting</option>
+                                                <option value="4">Cukup Penting</option>
+                                                <option value="5">Sangat Penting</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- JENIS VELK --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Jenis velg <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="jenis_velg" id="jenis_velg" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">Sangat Tidak Penting</option>
+                                                <option value="2">Tidak Penting</option>
+                                                <option value="3">Penting</option>
+                                                <option value="4">Cukup Penting</option>
+                                                <option value="5">Sangat Penting</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- HARGA MOBIL --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Harga mobil <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="harga_mobil" id="harga_mobil" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">Sangat Tidak Penting</option>
+                                                <option value="2">Tidak Penting</option>
+                                                <option value="3">Penting</option>
+                                                <option value="4">Cukup Penting</option>
+                                                <option value="5">Sangat Penting</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- SUMBER PENDAPATAN --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Sumber pendapatan <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="sumber_pendapatan" id="sumber_pendapatan" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                            <option value="1">Tidak Bekerja</option>
+                                            <option value="2">Freelance</option>
+                                            <option value="3">Tabungan</option>
+                                            <option value="4">Pekerjaan</option>
+                                            <option value="5">Pekerjaan + Tabungan</option>
+                                    </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- LOKASI TINGGAL --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Lokasi tinggal <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="lokasi_tinggal" id="lokasi_tinggal" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">Rumah susun</option>
+                                                <option value="2">Rumah pribadi/kontrak (tidak memiliki garasi)</option>
+                                                <option value="3">Rumah kontrak (memiliki garasi)</option>
+                                                <option value="4">Apartemen pribadi</option>
+                                                <option value="5">Rumah pribadi (memiliki garasi)</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- KEPEMILIKAN KENDARAAN --}}
+                            <div class="col-12 col-lg-6 mb-lg-3">
+                                <ul>
+                                    <li class="fw-bold fs-6"> Kepemilikan kendaraan <sup class="text-danger">*</sup></li>
+                                    <li class="list-unstyled">
+                                        <select class="form-select" name="kepemilikan_kendaraan" id="kepemilikan_kendaraan" required="">
+                                            <option value="" disabled="" selected="">-- Pilih --</option>
+                                                <option value="1">Belum memiliki kendaraan pribadi</option>
+                                                <option value="2">2-1 Kendaraan</option>
+                                                <option value="3">3 Kendaraan</option>
+                                                <option value="4">5-4 Kendaraan</option>
+                                                <option value="5">&gt; 5 Kendaraan</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            {{-- INI BUTTON UNTUK SAVE --}}
                             <div class="col-12">
                                 <button type="submit" id="submit" class="btn btn-success float-end">
                                     <svg height="1em" viewBox="0 0 448 512">
@@ -153,6 +345,81 @@
                             </div>
                         </div>
                     </form>
+                    {{-- SCRIPT JS UNTUK FILTER AWAL --}}
+                    <script>
+                        var raw_kapasitas_mesin;
+                        var raw_kapasitas_seat;
+
+                        $('#kapasitas_mesin').change(function(){
+                            raw_kapasitas_mesin = $(this).val();
+                            $('#kapasitas_penumpang option').not(':selected :disabled').remove();
+                            $("#forCheckbox").html('');
+                            $.ajax({
+                                method: "POST",
+                                dataType: "json",
+                                url: "{{ url('/api/produk-filter/kapasitas_cc') }}",
+                                data: {
+                                    raw_kapasitas_mesin: $(this).val(),
+                                },
+                                success: function(respon) {
+                                    if(respon.data.length == 0 ){
+                                        $("#kapasitas_penumpang").append('<option value="" disabled>Tidak ada data yang sesuai</option>');
+                                    }else{
+                                        $("#kapasitas_penumpang").append(' <option value="" disabled="" selected="">-- Pilih --</option>');
+                                        for (let i = 0; i < respon.data.length; i++) {
+                                            $('#kapasitas_penumpang').append('<option value="' + respon.data[i].kapasitas_orang + '">' + respon.data[i].kapasitas_orang + '</option>');
+                                        }
+                                    }
+                                },
+                                error: function(data){
+                                    alert("Terjadi Error Silahkan Refesh dan Coba lagi..")
+                                }
+                            });
+
+                        })
+
+                        $('#kapasitas_penumpang').change(function(){
+                            raw_kapasitas_seat = $(this).val();
+                                $("#forCheckbox").html('');
+                            $.ajax({
+                                method: "POST",
+                                dataType: "json",
+                                url: "{{ url('/api/produk-filter/kapasitas_seater') }}",
+                                data: {
+                                    raw_kapasitas_seat: $(this).val(),
+                                    raw_kapasitas_mesin: raw_kapasitas_mesin
+                                },
+                                success: function(respon) {
+                                    if(respon.data.length == 0 ){
+                                        $("#forCheckbox").html('Pilihan Tipe tidak tersedia');
+                                    }else{
+                                        $("#forCheckbox").html('');
+                                        var myHTML = '';
+                                            respon.data.forEach(element => {
+                                                myHTML +=   '<div class="form-check form-check-inline">'+
+                                                                '<input class="form-check-input" type="checkbox" id="'+element.nama+'" name="tipe_mobil[]" value="'+element.nama+'">'+
+                                                                '<label class="form-check-label" for="'+element.nama+'">'+element.nama+'</label>'+
+                                                            '</div>';
+                                                console.log(element.nama)
+                                            });
+                                        $("#forCheckbox").html(myHTML);
+                                        var checks = document.querySelectorAll(".form-check-input");
+                                        var max = 2;
+                                        for (var i = 0; i < checks.length; i++)
+                                        checks[i].onclick = selectiveCheck;
+                                        function selectiveCheck (event) {
+                                        var checkedChecks = document.querySelectorAll(".form-check-input:checked");
+                                        if (checkedChecks.length >= max + 1)
+                                            return false;
+                                        }
+                                    }
+                                },
+                                error: function(data){
+                                    alert("Terjadi Error Silahkan Refesh dan Coba lagi..")
+                                }
+                            });
+                        })
+                    </script>
                 </div>
             </div>
         </div>
