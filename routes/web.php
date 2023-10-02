@@ -15,12 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [MainController::class, 'index'])->name('index');
+Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard');
 Route::get('/our-product', [MainController::class, 'just_our_product'])->name('our_product');
 Route::get('/our-product/{nama}', [MainController::class, 'specific_product'])->name('specific_product');
 Route::post('/save-rekomendasi', [MainController::class, 'save_rekomendasi'])->name('save_rekomendasi');
 
 Route::get('/login', [MainController::class, 'login'])->name('login');
 
+Route::get('/dt-hasilsurvei', [MainController::class, 'dt_hasilsurvei'])->name('dt_hasilsurvei');
+Route::get('/dt-allproduct', [MainController::class, 'dt_allproduct'])->name('dt_allproduct');
 // Route::get('/rekomendasi', [MainController::class, 'rekomendasi'])->name('rekomendasi');
 // Route::post('/rekomendasi/simpan', [MainController::class, 'rekomendasi_simpan'])->name('rekomendasi_simpan');
 

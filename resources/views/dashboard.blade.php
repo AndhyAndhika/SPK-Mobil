@@ -1,427 +1,118 @@
 @extends('New-Template')
 @section('content')
-{{-- CAROSEL AWAL DAN SEJARAH --}}
-    <div class="row">
-        <div class="col-12 col-lg-8 mb-3 mb-lg-0">
-            <div class="card">
-                <div id="carouselExampleInterval" class="carousel slide carousel-fade" data-bs-ride="carousel">
-                    {{-- Ini untuk indicator dibawah gambar --}}
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                        <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                    </div>
-
-                    {{-- Gambarnya ada disini --}}
-                    <div class="carousel-inner">
-                        <div class="carousel-item active" data-bs-interval="2000">
-                        <img src="{{ asset('UIUX/IMG/iklan-ayla.webp') }}" class="d-block w-100" alt="{{ asset('UIUX/IMG/iklan-ayla.webp') }}">
-                        </div>
-                        <div class="carousel-item" data-bs-interval="2000">
-                        <img src="{{ asset('UIUX/IMG/iklan-xenia.webp') }}" class="d-block w-100" alt="{{ asset('UIUX/IMG/iklan-xenia.webp') }}">
-                        </div>
-                        <div class="carousel-item" data-bs-interval="2000">
-                        <img src="{{ asset('UIUX/IMG/iklan-rocky.webp') }}" class="d-block w-100" alt="{{ asset('UIUX/IMG/iklan-rocky.webp') }}">
-                        </div>
-                        <div class="carousel-item" data-bs-interval="2000">
-                        <img src="{{ asset('UIUX/IMG/iklan-sirion.webp') }}" class="d-block w-100" alt="{{ asset('UIUX/IMG/iklan-sirion.webp') }}">
-                        </div>
-                    </div>
-
-                    {{-- ini button panah untuk geser --}}
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-4">
-            <div class="card">
+    {{-- WELCOMING CARD DASHBOARD --}}
+    <div class="row" style="margin-top: -2vh;">
+        <div class="col-12" >
+            <div class="card w-100" style="background-color: rgb(102, 255, 255); height: 10vh;">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12">
-                            <h3 class="h3 text-center fw-bold text-decoration-underline">SEJARAH PERUSAHAAN</h3>
+                        <div class="col-6">
+                            <p class="card-title fw-bold fs-5">Halaman Login SPV</p>
                         </div>
-                        <div class="col-12 text-start bg-logoTunas">
-                            <p class="text-align-justify fs-6 fw-bold">&ensp;&ensp;&ensp;&ensp;&ensp;PT Tunas Ridean ("Tunas Group") terlahir sebagai perusahaan keluarga bernama Tunas Indonesia Motor pada tahun 1967 sebagai importir dan penjualan mobil baru maupun bekas. Pada tahun 1980, grup mengintegrasikan seluruh bisnis unit ke dalam satu Perseroan induk PT Tunas Ridean.</p> <br>
-                            <p class="text-align-justify fs-6 fw-bold">&ensp;&ensp;&ensp;&ensp;&ensp;Tunas Daihatsu berdiri sejak 1970 dan bagian dari Tunas Group selalu berkomitmen untuk memberikan produk yang berkualitas kepada konsumen mereka. Penggunaan bahan material berkualitas, proses pengerjaan dengan standar tinggi hingga quality control yang ketat menjamin mobil Daihatsu yang akan konsumen terima terjaga dalam kondisi yang prima dan optimal.</p>
+                        <div class="col-5">
+                            <p class="text-dark text-end fs-5">Selamat Datang, <span class="fw-bold">Binta</span> </p>
                         </div>
-                        <div class="col-12">
-                            <img src="{{ asset('UIUX/IMG/daihatsu-jargon.webp') }}" class="float-end d-block w-25" alt="{{ asset('UIUX/IMG/daihatsu-jargon.webp') }}">
+                        <div class="col-1 m-0">
+                            <a href="" class="btn btn-danger btn-sm w-100 text-light">Logout
+                                <svg height="1em" viewBox="0 0 512 512" style="fill:#ffffff">
+                                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-{{-- TAG OUR PRODUCT --}}
-    <div class="row mt-5 mb-3" id="Our-Product">
-        <div class="d-flex justify-content-center">
-            <span class="fs-3 text-center badge bg-info text-dark fw-bold" style="width: 16rem; height: 3rem;" >OUR PRODUCT</span>
-        </div>
-    </div>
-{{-- FOTO FOTO MOBILNYA --}}
-    <div class="row justify-content-center">
-        <style>
-            .img-hover:hover {
-                background-color: #6a737bd2;
-            }
-        </style>
-        @foreach ($Products as $item)
-            <div class="col-12 col-lg-3 mb-3">
-                <div class="card border border-0 mx-auto" style="width: 18rem; height:18rem;" >
-                    <a href="{{ url('/our-product'.'/'. $item->nama) }}">
-                        <img src="{{ asset('UIUX/IMG/' . $item->nama . '.webp') }}"  class="card-img-top img-hover" alt="{{ asset('UIUX/IMG/' . $item->nama . '.webp') }}">
-                    </a>
+    {{-- CONTENT ON DASHBOARD --}}
+    <div class="row mt-1 mb-2">
+        <div class="d-flex align-items-start">
+            <div class="col-2">
+                <div class="card">
+                    <div class="card-body" style="height: 63.5vh">
+                        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <button class="nav-link active" id="v-pills-Hasil-Survei-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Hasil-Survei" type="button" role="tab" aria-controls="v-pills-Hasil-Survei" aria-selected="true">Hasil Survei</button>
+                            <button class="nav-link" id="v-pills-Product-Sale-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Product-Sale" type="button" role="tab" aria-controls="v-pills-Product-Sale" aria-selected="false">Product Sale</button>
+                            {{-- <button class="nav-link" id="v-pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#v-pills-disabled" type="button" role="tab" aria-controls="v-pills-disabled" aria-selected="false" disabled>Disabled</button>
+                            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</button>
+                            <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button> --}}
+                          </div>
+                    </div>
                 </div>
             </div>
-        @endforeach
-    </div>
-{{-- TAMPILAN UNTUK SPK --}}
-    <div class="row justify-content-center mx-auto" id="Recomendasi-card">
-        <div class="col-12 text-center mb-3">
-            <span class="fs-3 mb-3 text-center badge bg-info text-dark fw-bold" style="width: 21rem; height: 3rem;" >BANTU SAYA MEMILIH</span>
-            <p class="text-center fs-5">Beri tahu kami apa yang Anda butuhkan. Kami membantu Anda memilih produk yang tepat.</p>
-        </div>
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <form action="{{ url('/save-rekomendasi') }}" method="POST" enctype="multipart/form-data" onsubmit="DisabledButtomSubmit()">
-                        {{-- <form enctype="multipart/form-data" onsubmit="SubmitRekomendasi(event)"> --}}
-                        @csrf
-                        <div class="row">
-                            {{-- NAMA ANDA --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6">Nama Anda<sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <input class="form-control" type="text" name="nama_anda" placeholder="Nama Anda" aria-label="Nama Anda example" required>
-                                    </li>
-                                </ul>
+            <div class="col-10">
+                <div class="card ms-1">
+                    <div class="card-body" style="height: 63.5vh">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            {{-- TAB HASIL SURVEI --}}
+                            <div class="tab-pane fade show active" id="v-pills-Hasil-Survei" role="tabpanel" aria-labelledby="v-pills-Hasil-Survei-tab" tabindex="0">
+                                <div class="table-responsive">
+                                    <button class="btn btn-success btn-sm mb-2 float-end" onclick="AddMachine()"><i class="fa-solid fa-plus"></i>
+                                        Download</button>
+                                    <table id="dt_hasilsurvei" class="table table-light table-hover table-bordered display">
+                                        <thead>
+                                            <tr>
+                                                <th>Customer Name</th>
+                                                <th>Telp Number</th>
+                                                <th>Our Recomended</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
-                            {{-- NOMOR TELPON --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6">Nomor Telp<sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon1">+62 </span>
-                                            <input type="number" name="no_telp" class="form-control" placeholder="No-telp" required>
-                                        </div>
-                                    </li>
-                                </ul>
+                            {{-- TAB PRODUCT SALE --}}
+                            <div class="tab-pane fade" id="v-pills-Product-Sale" role="tabpanel" aria-labelledby="v-pills-Product-Sale-tab" tabindex="0">
+                                <div class="table-responsive">
+                                    <button class="btn btn-primary btn-sm mb-2 float-end" onclick="AddMachine()"><i class="fa-solid fa-plus"></i>
+                                        New Product</button>
+                                    <table id="dt_allproduct" class="table table-light table-hover table-bordered display">
+                                        <thead>
+                                            <tr>
+                                                <th>Customer Name</th>
+                                                <th>Telp Number</th>
+                                                <th>Our Recomended</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
-                            {{-- KAPASITAS MESIN --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Kapasitas mesin <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="kapasitas_mesin" id="kapasitas_mesin" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1, 0, 998">998 cc</option>
-                                                <option value="2, 1197, 1198">1197 cc - 1198cc</option>
-                                                <option value="3, 1298, 1329">1298 cc - 1329 cc</option>
-                                                <option value="4, 1945, 1946">1945 cc - 1946 cc</option>
-                                                <option value="5, 2496, 2496">2496 cc</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- KAPASITAS PENUMPANG --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Kapasitas penumpang <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="kapasitas_penumpang" id="kapasitas_penumpang" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <div id="option_kapasitas_penumpang"></div>
-                                                {{-- <option value="1, 2">2 seat</option>
-                                                <option value="2, 3">3 seat</option>
-                                                <option value="3, 5">5 seat</option>
-                                                <option value="4, 7">7 seat</option>
-                                                <option value="5, 8">8 seat</option> --}}
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- PILIHAN MOBIL 2 MOBIL SEKALIGUS --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6">Pilih mobil yang diinginkan (Wajib pilih 2 mobil)<sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <div id="forCheckbox"></div>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- KEAMANAN BERKENDARA --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Keamanan dalam berkendara <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="keamanan_dalam_berkendara" id="keamanan_dalam_berkendara" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">Sangat Tidak Penting</option>
-                                                <option value="2">Tidak Penting</option>
-                                                <option value="3">Penting</option>
-                                                <option value="4">Cukup Penting</option>
-                                                <option value="5">Sangat Penting</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- INTERITOR MOBIL --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Interior mobil <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="interior_mobil" id="interior_mobil" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">Sangat Tidak Penting</option>
-                                                <option value="2">Tidak Penting</option>
-                                                <option value="3">Penting</option>
-                                                <option value="4">Cukup Penting</option>
-                                                <option value="5">Sangat Penting</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- DIMENSI MOBIL --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Dimensi mobil <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="dimensi_mobil" id="dimensi_mobil" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">Kecil</option>
-                                                <option value="2">Sedang</option>
-                                                <option value="3">Cukup Besar</option>
-                                                <option value="4">Besar</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- JUMLAH KEINGINAN EKSTERIOR --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Jumlah keinginan eksterior <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="jumlah_keinginan_eksterior" id="jumlah_keinginan_eksterior" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">&lt; 3 purpose</option>
-                                                <option value="2">8 - 3 purpose</option>
-                                                <option value="3">14 - 9 purpose</option>
-                                                <option value="4">20 - 15 purpose</option>
-                                                <option value="5">&gt; 20 purpose</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- JUMLAH FITUR TAMBAHAN --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Jumlah keinginan fitur tambahan <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="jumlah_keinginan_fitur_tambahan" id="jumlah_keinginan_fitur_tambahan" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">&lt; 3 commodity</option>
-                                                <option value="2">8 - 3 commodity</option>
-                                                <option value="3">14 - 9 commodity</option>
-                                                <option value="4">20 - 15 commodity</option>
-                                                <option value="5">&gt; 20 commodity</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- WARNA MOBIL --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Warna mobil <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="warna_mobil" id="warna_mobil" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">Sangat Tidak Penting</option>
-                                                <option value="2">Tidak Penting</option>
-                                                <option value="3">Penting</option>
-                                                <option value="4">Cukup Penting</option>
-                                                <option value="5">Sangat Penting</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- JENIS VELK --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Jenis velg <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="jenis_velg" id="jenis_velg" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">Sangat Tidak Penting</option>
-                                                <option value="2">Tidak Penting</option>
-                                                <option value="3">Penting</option>
-                                                <option value="4">Cukup Penting</option>
-                                                <option value="5">Sangat Penting</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- HARGA MOBIL --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Harga mobil <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="harga_mobil" id="harga_mobil" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">Sangat Tidak Penting</option>
-                                                <option value="2">Tidak Penting</option>
-                                                <option value="3">Penting</option>
-                                                <option value="4">Cukup Penting</option>
-                                                <option value="5">Sangat Penting</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- SUMBER PENDAPATAN --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Sumber pendapatan <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="sumber_pendapatan" id="sumber_pendapatan" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                            <option value="1">Tidak Bekerja</option>
-                                            <option value="2">Freelance</option>
-                                            <option value="3">Tabungan</option>
-                                            <option value="4">Pekerjaan</option>
-                                            <option value="5">Pekerjaan + Tabungan</option>
-                                    </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- LOKASI TINGGAL --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Lokasi tinggal <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="lokasi_tinggal" id="lokasi_tinggal" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">Rumah susun</option>
-                                                <option value="2">Rumah pribadi/kontrak (tidak memiliki garasi)</option>
-                                                <option value="3">Rumah kontrak (memiliki garasi)</option>
-                                                <option value="4">Apartemen pribadi</option>
-                                                <option value="5">Rumah pribadi (memiliki garasi)</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- KEPEMILIKAN KENDARAAN --}}
-                            <div class="col-12 col-lg-6 mb-lg-3">
-                                <ul>
-                                    <li class="fw-bold fs-6"> Kepemilikan kendaraan <sup class="text-danger">*</sup></li>
-                                    <li class="list-unstyled">
-                                        <select class="form-select" name="kepemilikan_kendaraan" id="kepemilikan_kendaraan" required="">
-                                            <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">Belum memiliki kendaraan pribadi</option>
-                                                <option value="2">2-1 Kendaraan</option>
-                                                <option value="3">3 Kendaraan</option>
-                                                <option value="4">5-4 Kendaraan</option>
-                                                <option value="5">&gt; 5 Kendaraan</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </div>
-                            {{-- INI BUTTON UNTUK SAVE --}}
-                            <div class="col-12">
-                                <button type="submit" id="submit" class="btn btn-success float-end">
-                                    <svg height="1em" viewBox="0 0 448 512">
-                                    <style>svg{fill:#ffffff}</style>
-                                    <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/>
-                                    </svg> SUBMIT
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    {{-- SCRIPT JS UNTUK FILTER AWAL --}}
-                    <script>
-                        var raw_kapasitas_mesin;
-                        var raw_kapasitas_seat;
-
-                        $('#kapasitas_mesin').change(function(){
-                            raw_kapasitas_mesin = $(this).val();
-                            $('#kapasitas_penumpang option').not(':selected :disabled').remove();
-                            $("#forCheckbox").html('');
-                            $.ajax({
-                                method: "POST",
-                                dataType: "json",
-                                url: "{{ url('/api/produk-filter/kapasitas_cc') }}",
-                                data: {
-                                    raw_kapasitas_mesin: $(this).val(),
-                                },
-                                success: function(respon) {
-                                    if(respon.data.length == 0 ){
-                                        $("#kapasitas_penumpang").append('<option value="" disabled>Tidak ada data yang sesuai</option>');
-                                    }else{
-                                        $("#kapasitas_penumpang").append(' <option value="" disabled="" selected="">-- Pilih --</option>');
-                                        for (let i = 0; i < respon.data.length; i++) {
-                                            $('#kapasitas_penumpang').append('<option value="' + respon.data[i].kapasitas_orang + '">' + respon.data[i].kapasitas_orang + '</option>');
-                                        }
-                                    }
-                                },
-                                error: function(data){
-                                    alert("Terjadi Error Silahkan Refesh dan Coba lagi..")
-                                }
-                            });
-
-                        })
-
-                        $('#kapasitas_penumpang').change(function(){
-                            raw_kapasitas_seat = $(this).val();
-                                $("#forCheckbox").html('');
-                            $.ajax({
-                                method: "POST",
-                                dataType: "json",
-                                url: "{{ url('/api/produk-filter/kapasitas_seater') }}",
-                                data: {
-                                    raw_kapasitas_seat: $(this).val(),
-                                    raw_kapasitas_mesin: raw_kapasitas_mesin
-                                },
-                                success: function(respon) {
-                                    if(respon.data.length == 0 ){
-                                        $("#forCheckbox").html('Pilihan Tipe tidak tersedia');
-                                    }else{
-                                        $("#forCheckbox").html('');
-                                        var myHTML = '';
-                                            respon.data.forEach(element => {
-                                                myHTML +=   '<div class="form-check form-check-inline">'+
-                                                                '<input class="form-check-input" type="checkbox" id="'+element.nama+'" name="tipe_mobil[]" value="'+element.nama+'">'+
-                                                                '<label class="form-check-label" for="'+element.nama+'">'+element.nama+'</label>'+
-                                                            '</div>';
-                                                console.log(element.nama)
-                                            });
-                                        $("#forCheckbox").html(myHTML);
-                                        var checks = document.querySelectorAll(".form-check-input");
-                                        var max = 2;
-                                        for (var i = 0; i < checks.length; i++)
-                                        checks[i].onclick = selectiveCheck;
-                                        function selectiveCheck (event) {
-                                        var checkedChecks = document.querySelectorAll(".form-check-input:checked");
-                                        if (checkedChecks.length >= max + 1)
-                                            return false;
-                                        }
-                                    }
-                                },
-                                error: function(data){
-                                    alert("Terjadi Error Silahkan Refesh dan Coba lagi..")
-                                }
-                            });
-                        })
-                    </script>
+                            {{-- <div class="tab-pane fade" id="v-pills-disabled" role="tabpanel" aria-labelledby="v-pills-disabled-tab" tabindex="0">...</div>
+                            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
+                            <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div> --}}
+                          </div>
+                    </div>
                 </div>
             </div>
-        </div>
+          </div>
     </div>
+    <script>
+        $(function () {
+            var table = $('#dt_hasilsurvei').DataTable({
+            "iDisplayLength": 5,
+            "lengthChange": false,
+            processing: true,
+            serverSide: true,
+            ajax: "{{ url('/dt-hasilsurvei') }}",
+            columns: [
+                {data: 'name', name: 'name'},
+                {data: 'no_telp', name: 'no_telp'},
+                {data: 'hasil', name: 'hasil'},
+            ]
+            });
+        });
+
+        $(function () {
+            var table = $('#dt_allproduct').DataTable({
+            "iDisplayLength": 5,
+            "lengthChange": false,
+            processing: true,
+            serverSide: true,
+            ajax: "{{ url('/dt-allproduct') }}",
+            columns: [
+                // {data: 'name', name: 'name'},
+                // {data: 'no_telp', name: 'no_telp'},
+                // {data: 'hasil', name: 'hasil'},
+            ]
+            });
+        });
+    </script>
 @endsection

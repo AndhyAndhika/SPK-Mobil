@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pertanyaan;
 use App\Models\Product;
+use App\Models\Pertanyaan;
 use Illuminate\Http\Request;
 use App\Helpers\ApiFormatter;
+use App\Models\Survey;
+use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 
 class MainController extends Controller
 {
@@ -15,13 +18,13 @@ class MainController extends Controller
         return view('login');
     }
 
-    public function index() //handle tampilan dashboard.
+    public function index() //handle tampilan landing-page.
     {
         $data = Pertanyaan::whereNotIn('id', [0])->get(); //Ambil semua pertanyaan kecuali yang berID = 3
         $Products = Product::GroupBy('nama')->get('nama');
         // $image = url('/UIUX/IMG/ayla.webp');
         // Alert::image('<i class="fs-5"> KAMI MEREKOMENDASIKAN </i> <br> <b>DAIHATSU AYLA</b>', '', "$image", 'Image Width', 'Image Height', 'Image Alt');
-        return view('dashboard', compact('data', 'Products'));
+        return view('landing-page', compact('data', 'Products'));
     }
 
     public function just_our_product() //handle jika routing hanya '/our-product' aja.
@@ -41,9 +44,50 @@ class MainController extends Controller
         return redirect()->route('index')->with('berhasil', 'berhasil');
     }
 
+    //====================['HANDLE DASHBOARD AFTER LOGIN PAGE']====================//
+
+    public function dashboard()
+    {
+        $data = "";
+        $Products = "";
+        return view('dashboard', compact('data', 'Products'));
+    }
+
+    //====================['HANDLE YAJRA']====================//
+
+    public function dt_hasilsurvei(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Survey::all();
+            return DataTables::of($data)->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $btn = '<a class="btn fa-solid fa-pen-to-square fa-lg text-warning" onclick="EditReject(' . $data->id . ')"></a>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+    }
+
+    public function dt_allproduct(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Product::all();
+            return DataTables::of($data)->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $btn = '<a class="btn fa-solid fa-pen-to-square fa-lg text-warning" onclick="EditReject(' . $data->id . ')"></a>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+    }
+
     // public function rekomendasi()
     // {
-    //     $data = Pertanyaan::whereNotIn('id', [1])->get();
+        //     $data = Pertanyaan::whereNotIn('id', [1])->get();
     //     $Products = Product::GroupBy('namaa')->get('nama');
     //     return view('rekomendasi', compact('data', 'Products'));
     // }
@@ -81,7 +125,7 @@ class MainController extends Controller
         if ($dataArray[1] != null && $dataArray[2] != null && $request->raw_kapasitas_seat != null) {
             $data = Product::whereBetween('kapasitas_cc', [$dataArray[1], $dataArray[2]])
                 ->where('kapasitas_orang', $request->raw_kapasitas_seat)
-                ->GroupBy('nama')
+                // ->GroupBy('nama')
                 ->get();
             return ApiFormatter::createAPi('200', 'Berhasil', $data);
         } else {

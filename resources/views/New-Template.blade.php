@@ -10,9 +10,12 @@
         <link rel="icon" href="{{ asset('UIUX/IMG/logo-tunas.webp') }}">
         <link href="{{ asset('UIUX/JSCSS/bootstrap-min.css') }}" rel="stylesheet">
         <link href="{{ asset('UIUX/JSCSS/bootstrap-icons.css') }}" rel="stylesheet">
+        <link href="{{ asset('UIUX/JSCSS/datatables.css') }}" rel="stylesheet">
         <link href="{{ asset('UIUX/JSCSS/select2.css') }}" rel="stylesheet">
         <link href="{{ asset('UIUX/JSCSS/self-style.css') }}" rel="stylesheet">
         <script src="{{ asset('UIUX/JSCSS/jquery-3.7.0.js') }}"></script>
+        <script src="{{ asset('UIUX/JSCSS/datatables.js') }}"></script>
+        <script src="{{ asset('UIUX/JSCSS/jquerydatatables.js') }}"></script>
         <script src="{{ asset('UIUX/JSCSS/select2.js') }}"></script>
     </head>
 <body style="background-color: #f8f9fa">
