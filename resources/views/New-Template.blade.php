@@ -34,7 +34,11 @@
                 <a class="nav-link text-white" href="{{ url('/') }}">HOME</a>
                 <a class="nav-link text-white" href="{{ url('/#Our-Product') }}">PRODUCT</a>
                 <a class="nav-link text-white" href="{{ url('/#Recomendasi-card') }}">RECOMMEND</a>
-                <a class="nav-link text-white" href="{{ url('/login') }}" >LOGIN</a>
+                @if (Auth::check() != true)
+                    <a class="nav-link text-white" href="{{ url('/login') }}" >LOGIN</a>
+                @else
+                    <a class="nav-link text-white" href="{{ url('/dashboard') }}">DASHBOARD</a>
+                @endif
             </nav>
         </div>
     </div>

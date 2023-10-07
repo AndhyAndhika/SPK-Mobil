@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SurveyExport;
+use App\Models\Survey;
 use App\Models\Product;
 use App\Models\Pertanyaan;
 use Illuminate\Http\Request;
 use App\Helpers\ApiFormatter;
-use App\Models\Survey;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,7 +19,11 @@ class MainController extends Controller
 {
     public function login() //handle tampilan login.
     {
-        return view('login');
+        if (Auth::check() == true) {
+            return redirect()->route('dashboard');
+        } else {
+            return view('login');
+        }
     }
 
     public function index() //handle tampilan landing-page.
@@ -40,8 +48,32 @@ class MainController extends Controller
 
     public function save_rekomendasi(Request $request) //handle post dari form 'bantu kami' di dashboard
     {
-        dd($request);
-        return redirect()->route('index')->with('berhasil', 'berhasil');
+        // dd($request);
+        $validator = Validator::make($request->all(), [
+            "nama_anda" => 'required',
+            "no_telp" => 'required',
+            "kapasitas_mesin" => 'required',
+            "kapasitas_penumpang" => 'required',
+            "id_tipe_mobil" => 'required|array|size:2',
+            "keamanan_dalam_berkendara" => 'required',
+            "interior_mobil" => 'required',
+            "dimensi_mobil" => 'required',
+            "jumlah_keinginan_eksterior" => 'required',
+            "jumlah_keinginan_fitur_tambahan" => 'required',
+            "warna_mobil" => 'required',
+            "jenis_velg" => 'required',
+            "harga_mobil" => 'required',
+            "sumber_pendapatan" => 'required',
+            "lokasi_tinggal" => 'required',
+            "kepemilikan_kendaraan" => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            Alert::toast('Harap Mengisi Form Dengan Lengkap', 'error');
+            return redirect()->route('index');
+        }
+        Alert::toast('Terjadi Error.! Hubungi Team Program', 'error');
+        return redirect()->route('index');
     }
 
     //====================['HANDLE DASHBOARD AFTER LOGIN PAGE']====================//
@@ -49,7 +81,7 @@ class MainController extends Controller
     public function dashboard()
     {
         $data = "";
-        $Products = "";
+        $Products = Product::all();
         return view('dashboard', compact('data', 'Products'));
     }
 
@@ -84,6 +116,13 @@ class MainController extends Controller
                 ->make(true);
         }
     }
+
+    //====================['HANDLE DOWNLOAD']====================//
+    public function dw_survey()
+    {
+        return Excel::download(new SurveyExport, 'HasilSurvey.xlsx');
+    }
+
 
     // public function rekomendasi()
     // {
@@ -132,5 +171,37 @@ class MainController extends Controller
             return ApiFormatter::createAPi('400', 'Gagal');
         }
         return ApiFormatter::createAPi('400', 'Gagal');
+    }
+
+    //====================['HANDLE LOGIN']====================//
+    public function login_checking(Request $request)
+    {
+        $credentials =  $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $message = "Login successfully, Hello " . Auth::user()->name;
+            Alert::toast($message, 'success');
+            return redirect()->route('dashboard');
+        } else {
+            Alert::toast('Role is not defined!', 'error');
+            return back();
+        }
+        return redirect()->route('login');
+    }
+    public function login_destroying(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        Alert::toast('Berhasil Logout, Have A Good Day.', 'info');
+        return redirect('/');
     }
 }

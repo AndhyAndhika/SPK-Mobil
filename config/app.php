@@ -179,6 +179,8 @@ return [
 
         // AddRealRashid SweetAllert
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        // Add Laravel Excel
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -237,6 +239,8 @@ return [
 
         // AddRealRashid SweetAllert
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        // Add Laravel Excel
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

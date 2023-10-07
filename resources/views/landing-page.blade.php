@@ -93,7 +93,6 @@
             <div class="card">
                 <div class="card-body">
                     <form action="{{ url('/save-rekomendasi') }}" method="POST" enctype="multipart/form-data" onsubmit="DisabledButtomSubmit()">
-                        {{-- <form enctype="multipart/form-data" onsubmit="SubmitRekomendasi(event)"> --}}
                         @csrf
                         <div class="row">
                             {{-- NAMA ANDA --}}
