@@ -19,7 +19,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class MainController extends Controller
 {
-    public function login() //handle tampilan login.
+    public function login() // handle tampilan login.
     {
         if (Auth::check() == true) {
             return redirect()->route('dashboard');
@@ -28,7 +28,7 @@ class MainController extends Controller
         }
     }
 
-    public function index() //handle tampilan landing-page.
+    public function index() // handle tampilan landing-page.
     {
         $data = Pertanyaan::whereNotIn('id', [0])->get(); //Ambil semua pertanyaan kecuali yang berID = 3
         $Products = Product::GroupBy('nama')->get('nama');
@@ -37,38 +37,56 @@ class MainController extends Controller
         return view('landing-page', compact('data', 'Products'));
     }
 
-    public function just_our_product() //handle jika routing hanya '/our-product' aja.
+    public function just_our_product() // handle jika routing hanya '/our-product' aja.
     {
         return redirect()->route('index');
     }
 
-    public function specific_product($nama) //menampilkan salah satu produk yang di klik pada dashboard.
+    public function specific_product($nama) // menampilkan salah satu produk yang di klik pada dashboard.
     {
         $data = Product::where('nama', $nama)->get(); //query utuk ambil data berdasarkan $nama yang diparsing routing.
         return view('detail-product', compact('data', 'nama'));
     }
 
-    public function save_rekomendasi(Request $request) //handle post dari form 'bantu kami' di dashboard
+    public function save_rekomendasi(Request $request) // handle post dari form 'bantu kami' di dashboard
     {
-        // dd($request);
+        dd($request);
         $validator = Validator::make($request->all(), [
             "nama_anda" => 'required',
             "no_telp" => 'required',
-            "kapasitas_mesin" => 'required',
-            "kapasitas_penumpang" => 'required',
+            "kapasitas_mesin" => 'required', // K5
+            "kapasitas_penumpang" => 'required', // K6
             "id_tipe_mobil" => 'required|array|size:2',
-            "keamanan_dalam_berkendara" => 'required',
-            "interior_mobil" => 'required',
-            "dimensi_mobil" => 'required',
-            "jumlah_keinginan_eksterior" => 'required',
-            "jumlah_keinginan_fitur_tambahan" => 'required',
-            "warna_mobil" => 'required',
-            "jenis_velg" => 'required',
-            "harga_mobil" => 'required',
-            "sumber_pendapatan" => 'required',
-            "lokasi_tinggal" => 'required',
-            "kepemilikan_kendaraan" => 'required',
+            "keamanan_dalam_berkendara" => 'required', // K7
+            "interior_mobil" => 'required', // K8
+            "dimensi_mobil" => 'required', // K9
+            "jumlah_keinginan_eksterior" => 'required', // K11
+            "jumlah_keinginan_fitur_tambahan" => 'required', // K10
+            "warna_mobil" => 'required', // K12
+            "jenis_velg" => 'required', // K13
+            "harga_mobil" => 'required', // K4
+            "sumber_pendapatan" => 'required', // K1
+            "lokasi_tinggal" => 'required', // K2
+            "kepemilikan_kendaraan" => 'required', // K3
         ]);
+
+        $totalNilai = $request->sumber_pendapatan + $request->lokasi_tinggal + $request->kepemilikan_kendaraan + $request->harga_mobil + $request->kapasitas_mesin + $request->kapasitas_penumpang + $request->keamanan_dalam_berkendara + $request->interior_mobil + $request->dimensi_mobil + $request->jumlah_keinginan_fitur_tambahan + $request->jumlah_keinginan_eksterior + $request->warna_mobil + $request->jenis_velg;
+
+        // $perhitunganRelatif = [
+        //     "K1" => ,
+        //     "K2" => ,
+        //     "K3" => ,
+        //     "K4" => ,
+        //     "K5" => ,
+        //     "K6" => ,
+        //     "K7" => ,
+        //     "K8" => ,
+        //     "K9" => ,
+        //     "K10" => ,
+        //     "K11" => ,
+        //     "K12" => ,
+        //     "K13" =>
+        // ];
 
         if ($validator->fails()) {
             Alert::toast('Harap Mengisi Form Dengan Lengkap', 'error');
@@ -78,45 +96,180 @@ class MainController extends Controller
         return redirect()->route('index');
     }
 
+    public function save_product(Request $request) // handle post untuk nambah product
+    {
+        $validator = Validator::make($request->all(), [
+            'kode' => 'required',
+            'nama' => 'required',
+            'type' => 'required',
+            'price' => 'required',
+            'kode_price' => 'required',
+            'eksterior' => 'required',
+            'kode_eksterior' => 'required',
+            'kapasitas_cc' => 'required',
+            'kode_kapasitas_cc' => 'required',
+            'dimensi' => 'required',
+            'kode_dimensi' => 'required',
+            'kapasitas_orang' => 'required',
+            'kode_kapasitas_orang' => 'required',
+            'safety' => 'required',
+            'kode_safety' => 'required',
+            'interior' => 'required',
+            'kode_interior' => 'required',
+            'velg' => 'required',
+            'kode_velg' => 'required',
+            'fitur_tambahan' => 'required',
+            'kode_fitur_tambahan' => 'required',
+            'warna_tersedia' => 'required',
+            'kode_warna_tersedia' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            Alert::toast('Terdapat Field Yang Kosong', 'error');
+            return back();
+        }
+
+        $insert = Product::create([
+            'kode' => $request->kode,
+            'nama' => $request->nama,
+            'type' => $request->type,
+            'price' => $request->price,
+            'kode_price' => $request->kode_price,
+            'eksterior' => $request->eksterior,
+            'kode_eksterior' => $request->kode_eksterior,
+            'kapasitas_cc' => $request->kapasitas_cc,
+            'kode_kapasitas_cc' => $request->kode_kapasitas_cc,
+            'dimensi' => $request->dimensi,
+            'kode_dimensi' => $request->kode_dimensi,
+            'kapasitas_orang' => $request->kapasitas_orang,
+            'kode_kapasitas_orang' => $request->kode_kapasitas_orang,
+            'safety' => $request->safety,
+            'kode_safety' => $request->kode_safety,
+            'interior' => $request->interior,
+            'kode_interior' => $request->kode_interior,
+            'velg' => $request->velg,
+            'kode_velg' => $request->kode_velg,
+            'fitur_tambahan' => $request->fitur_tambahan,
+            'kode_fitur_tambahan' => $request->kode_fitur_tambahan,
+            'warna_tersedia' => $request->warna_tersedia,
+            'kode_warna_tersedia' => $request->kode_warna_tersedia,
+        ]);
+        if ($insert) {
+            Alert::toast('Input Data Berhasil', 'success');
+            return redirect()->route('dashboard');
+        }
+        Alert::toast('Terdapat Error Pada Query', 'error');
+        return back();
+    }
+
+    public function update_product(Request $request) // handle post untuk update product
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'kode' => 'required',
+            'nama' => 'required',
+            'type' => 'required',
+            'price' => 'required',
+            'kode_price' => 'required',
+            'eksterior' => 'required',
+            'kode_eksterior' => 'required',
+            'kapasitas_cc' => 'required',
+            'kode_kapasitas_cc' => 'required',
+            'dimensi' => 'required',
+            'kode_dimensi' => 'required',
+            'kapasitas_orang' => 'required',
+            'kode_kapasitas_orang' => 'required',
+            'safety' => 'required',
+            'kode_safety' => 'required',
+            'interior' => 'required',
+            'kode_interior' => 'required',
+            'velg' => 'required',
+            'kode_velg' => 'required',
+            'fitur_tambahan' => 'required',
+            'kode_fitur_tambahan' => 'required',
+            'warna_tersedia' => 'required',
+            'kode_warna_tersedia' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            Alert::toast('Terdapat Field Yang Kosong', 'error');
+            return back();
+        }
+
+        $insert = Product::find($request->id)->update([
+            'kode' => $request->kode,
+            'nama' => $request->nama,
+            'type' => $request->type,
+            'price' => $request->price,
+            'kode_price' => $request->kode_price,
+            'eksterior' => $request->eksterior,
+            'kode_eksterior' => $request->kode_eksterior,
+            'kapasitas_cc' => $request->kapasitas_cc,
+            'kode_kapasitas_cc' => $request->kode_kapasitas_cc,
+            'dimensi' => $request->dimensi,
+            'kode_dimensi' => $request->kode_dimensi,
+            'kapasitas_orang' => $request->kapasitas_orang,
+            'kode_kapasitas_orang' => $request->kode_kapasitas_orang,
+            'safety' => $request->safety,
+            'kode_safety' => $request->kode_safety,
+            'interior' => $request->interior,
+            'kode_interior' => $request->kode_interior,
+            'velg' => $request->velg,
+            'kode_velg' => $request->kode_velg,
+            'fitur_tambahan' => $request->fitur_tambahan,
+            'kode_fitur_tambahan' => $request->kode_fitur_tambahan,
+            'warna_tersedia' => $request->warna_tersedia,
+            'kode_warna_tersedia' => $request->kode_warna_tersedia,
+        ]);
+
+        if ($insert) {
+            Alert::toast('Edit Data Berhasil', 'success');
+            return redirect()->route('dashboard');
+        }
+        Alert::toast('Terdapat Error Pada Query', 'error');
+        return back();
+    }
+
+    //====================['HANDLE LOGIN']====================//
+    public function login_checking(Request $request) // handle post login dan cek ketersediaan pada user
+    {
+        $credentials =  $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $message = "Login successfully, Hello " . Auth::user()->name;
+            Alert::toast($message, 'success');
+            return redirect()->route('dashboard');
+        } else {
+            Alert::toast('Role is not defined!', 'error');
+            return back();
+        }
+        return redirect()->route('login');
+    }
+
+    public function login_destroying(Request $request) // handle logout pada dashboard
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        Alert::toast('Berhasil Logout, Have A Good Day.', 'info');
+        return redirect('/');
+    }
+
     //====================['HANDLE DASHBOARD AFTER LOGIN PAGE']====================//
 
-    public function dashboard()
+    public function dashboard() // handle tampilan pada url '/dashboard'
     {
         $data = "";
         $Products = Product::all();
         return view('dashboard', compact('data', 'Products'));
-    }
-
-    //====================['HANDLE YAJRA']====================//
-
-    public function dt_hasilsurvei(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Survey::all();
-            return DataTables::of($data)->addIndexColumn()
-                ->addColumn('action', function ($data) {
-                    $btn = '<a class="btn fa-solid fa-pen-to-square fa-lg text-warning" onclick="EditReject(' . $data->id . ')"></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->addIndexColumn()
-                ->make(true);
-        }
-    }
-
-    public function dt_allproduct(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Product::all();
-            return DataTables::of($data)->addIndexColumn()
-                ->addColumn('action', function ($data) {
-                    $btn = '<a class="btn fa-solid fa-pen-to-square fa-lg text-warning" onclick="EditReject(' . $data->id . ')"></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->addIndexColumn()
-                ->make(true);
-        }
     }
 
     //====================['HANDLE DOWNLOAD']====================//
@@ -146,13 +299,13 @@ class MainController extends Controller
         return $columnRange;
     }
 
-    // for excel export
     public function getLastColumn($last)
-    { //last represent how mouch X axis spaces
+    {
+        //last represent how mouch X axis spaces
         return Coordinate::stringFromColumnIndex($last);
     }
 
-    public function dw_survey()
+    public function dw_survey() // handle request download pada table Survei
     {
         ini_set('memory_limit', '-1');
 
@@ -291,27 +444,60 @@ class MainController extends Controller
 
     }
 
+    //====================['HANDLE YAJRA']====================//
 
-    // public function rekomendasi()
-    // {
-        //     $data = Pertanyaan::whereNotIn('id', [1])->get();
-    //     $Products = Product::GroupBy('namaa')->get('nama');
-    //     return view('rekomendasi', compact('data', 'Products'));
-    // }
+    public function dt_hasilsurvei(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Survey::all();
+            return DataTables::of($data)->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $btn = '<a class="btn fa-solid fa-pen-to-square fa-lg text-warning" onclick="EditReject(' . $data->id . ')"></a>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+    }
 
-    // public function rekomendasi_simpan(Request $request)
-    // {
-    //     dd($request);
-    // }
+    public function dt_allproduct(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Product::all();
+            return DataTables::of($data)->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $btn = '<a class="btn fa-solid fa-pen-to-square fa-lg text-warning" onclick="EditReject(' . $data->id . ')"></a>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+    }
 
     //====================['HANDLE API FROM api.php']====================//
+
+    public function filter_product_byID($id)
+    {
+        $data = Product::find($id);
+        if ($data != null) {
+            return ApiFormatter::createAPi(200, 'Berhasil', $data);
+        } else {
+            return ApiFormatter::createAPi(400, 'Data Not Found');
+        }
+    }
 
     public function filter_product($spek, $value)
     {
         $data = Product::whereBetween('kapasitas_cc', [1197, 1198])
             ->where('kapasitas_orang', 5)
             ->get();
-        return ApiFormatter::createAPi('200', 'Berhsil', $data);
+        if ($data != null) {
+            return ApiFormatter::createAPi(200, 'Berhasil', $data);
+        } else {
+            return ApiFormatter::createAPi(400, 'Data Not Found');
+        }
     }
 
     public function filter_kapasitas_cc(Request $request)
@@ -319,11 +505,11 @@ class MainController extends Controller
         $dataArray = explode(", ", $request->raw_kapasitas_mesin);
         if ($dataArray[1] != null && $dataArray[2] != null) {
             $data = Product::whereBetween('kapasitas_cc', [$dataArray[1], $dataArray[2]])->GroupBy('kapasitas_orang')->orderBy('kapasitas_orang', 'asc')->get('kapasitas_orang');
-            return ApiFormatter::createAPi('200', 'Berhasil', $data);
+            return ApiFormatter::createAPi(200, 'Berhasil', $data);
         } else {
-            return ApiFormatter::createAPi('400', 'Gagal');
+            return ApiFormatter::createAPi(400, 'Gagal');
         }
-        return ApiFormatter::createAPi('400', 'Gagal');
+        return ApiFormatter::createAPi(400, 'Gagal');
     }
 
     public function filter_kapasitas_seater(Request $request)
@@ -334,42 +520,10 @@ class MainController extends Controller
                 ->where('kapasitas_orang', $request->raw_kapasitas_seat)
                 // ->GroupBy('nama')
                 ->get();
-            return ApiFormatter::createAPi('200', 'Berhasil', $data);
+            return ApiFormatter::createAPi(200, 'Berhasil', $data);
         } else {
-            return ApiFormatter::createAPi('400', 'Gagal');
+            return ApiFormatter::createAPi(400, 'Gagal');
         }
-        return ApiFormatter::createAPi('400', 'Gagal');
-    }
-
-    //====================['HANDLE LOGIN']====================//
-    public function login_checking(Request $request)
-    {
-        $credentials =  $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            $message = "Login successfully, Hello " . Auth::user()->name;
-            Alert::toast($message, 'success');
-            return redirect()->route('dashboard');
-        } else {
-            Alert::toast('Role is not defined!', 'error');
-            return back();
-        }
-        return redirect()->route('login');
-    }
-    public function login_destroying(Request $request)
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        Alert::toast('Berhasil Logout, Have A Good Day.', 'info');
-        return redirect('/');
+        return ApiFormatter::createAPi(400, 'Gagal');
     }
 }

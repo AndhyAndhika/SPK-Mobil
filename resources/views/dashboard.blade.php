@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <p class="card-title fw-bold fs-5">Halaman Login SPV</p>
+                            <p class="card-title fw-bold fs-5 text-capitalize">Halaman {{ Auth::User()->role }}</p>
                         </div>
                         <div class="col-5">
                             <p class="text-dark text-end fs-5">Selamat Datang, <span class="fw-bold text-capitalize">{{ Auth::user()->name }}</span> </p>
@@ -81,7 +81,10 @@
                                                 <th class="text-center">FITUR SAFETY</th>
                                                 <th class="text-center">FITUR TAMBAHAN</th>
                                                 <th class="text-center">WARNA TERSEDIA</th>
-                                                <th class="text-center">AKSI</th>
+                                                @if (Auth::User()->role == 'supervisor')
+                                                    <th class="text-center">AKSI</th>
+                                                @else
+                                                @endif
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -128,13 +131,16 @@
                                                             @endforeach
                                                         </ul>
                                                     </td>
-                                                    <td class="text-center">
-                                                        <a class="btn btn-warning" onclick="EditProduct({{ $item->id }}, '{{ $item->nama }} - {{ $item->type }}')">
-                                                            <svg height="1.5em" viewBox="0 0 512 512">
-                                                                <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/>
-                                                            </svg>
-                                                        </a>
-                                                    </td>
+                                                    @if (Auth::User()->role == 'supervisor')
+                                                        <td class="text-center">
+                                                            <a class="btn btn-warning" onclick="EditProduct({{ $item->id }}, '{{ $item->nama }} - {{ $item->type }}')">
+                                                                <svg height="1.5em" viewBox="0 0 512 512">
+                                                                    <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/>
+                                                                </svg>
+                                                            </a>
+                                                        </td>
+                                                    @else
+                                                    @endif
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -148,19 +154,128 @@
           </div>
           {{-- MODAL --}}
           <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                  ...
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Understood</button>
-                </div>
+                    <div class="modal-body">
+                        <form action="{{ url('/save-product') }}" method="POST" enctype="multipart/form-data" onsubmit="DisabledButtomSubmit()">
+                            @csrf
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="kode" class="form-label">Kode Product <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="kode" name="kode">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nama" class="form-label">Nama <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="nama" name="nama">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="type" class="form-label">Type <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="type" name="type">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label">Price <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="price" name="price">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kode_price" class="form-label">Kode Price <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_price" name="kode_price">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="eksterior" class="form-label">Eksterior <sup class="text-danger">*</sup> </label>
+                                        <input required type="textarea" class="form-control" id="eksterior" name="eksterior">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="kode_eksterior" class="form-label">Kode Eksterior <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_eksterior" name="kode_eksterior">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kapasitas_cc" class="form-label">Kapasitas CC <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="kapasitas_cc" name="kapasitas_cc">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kode_kapasitas_cc" class="form-label">Kode kapasitas CC <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_kapasitas_cc" name="kode_kapasitas_cc">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="dimensi" class="form-label">Dimensi <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="dimensi" name="dimensi">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kode_dimensi" class="form-label">Kode Dimensi <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_dimensi" name="kode_dimensi">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kapasitas_orang" class="form-label">Kapasitas Orang <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="kapasitas_orang" name="kapasitas_orang">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="kode_kapasitas_orang" class="form-label">Kode Kapasitas Orang <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_kapasitas_orang" name="kode_kapasitas_orang">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="safety" class="form-label">Safety <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="safety" name="safety">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kode_safety" class="form-label">Kode Safety <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_safety" name="kode_safety">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="interior" class="form-label">Interior <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="interior" name="interior">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kode_interior" class="form-label">Kode Interior <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_interior" name="kode_interior">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="velg" class="form-label">Velg <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="velg" name="velg">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="kode_velg" class="form-label">Kode Velg <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_velg" name="kode_velg">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="fitur_tambahan" class="form-label">Fitur Tambahan <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="fitur_tambahan" name="fitur_tambahan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kode_fitur_tambahan" class="form-label">Kode Fitur Tambahan <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_fitur_tambahan" name="kode_fitur_tambahan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="warna_tersedia" class="form-label">Warna Tersedia <sup class="text-danger">*</sup> </label>
+                                        <input required type="text" class="form-control" id="warna_tersedia" name="warna_tersedia">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kode_warna_tersedia" class="form-label">Kode Warna Tersedia <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="0" class="form-control" id="kode_warna_tersedia" name="kode_warna_tersedia">
+                                    </div>
+                                </div>
+                                <div id="insideCOl"></div>
+                                <div class="col-12">
+                                    <button type="submit" id="submit" class="btn btn-success float-end">
+                                        <svg height="1em" viewBox="0 0 448 512">
+                                        <style>svg{fill:#ffffff}</style>
+                                        <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/>
+                                        </svg> SUBMIT
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
               </div>
             </div>
           </div>
@@ -188,15 +303,75 @@
             });
         });
 
-        function AddProduct(){
-            $("#staticBackdropLabel").html('Add New Product'); //Untuk kasih judul di modal
-            $("#staticBackdrop").modal("show"); //kalo ID pake "#" kalo class pake "."
-            $("#page").html(data); //menampilkan view create di dalam id page
-        }
-        function EditProduct(id, product){
-            $("#staticBackdropLabel").html('<span class="text-capitalize">edit ' + product +'</span>'); //Untuk kasih judul di modal
-            $("#staticBackdrop").modal("show"); //kalo ID pake "#" kalo class pake "."
-            $("#page").html(data); //menampilkan view create di dalam id page
-        }
+        @if (Auth::User()->role == 'supervisor')
+            function AddProduct(){
+                $("#staticBackdropLabel").html('Add New Product'); //Untuk kasih judul di modal
+                $("#staticBackdrop").modal("show"); //kalo ID pake "#" kalo class pake "."
+                $("form").attr("action", "{{ url('/save-product') }}");
+                $("#kode").val("");
+                $("#nama").val("");
+                $("#type").val("");
+                $("#price").val(0);
+                $("#kode_price").val(0);
+                $("#eksterior").val("");
+                $("#kode_eksterior").val(0);
+                $("#kapasitas_cc").val("");
+                $("#kode_kapasitas_cc").val(0);
+                $("#dimensi").val("");
+                $("#kode_dimensi").val(0);
+                $("#kapasitas_orang").val("");
+                $("#kode_kapasitas_orang").val(0);
+                $("#safety").val("");
+                $("#kode_safety").val(0);
+                $("#interior").val("");
+                $("#kode_interior").val(0);
+                $("#velg").val("");
+                $("#kode_velg").val(0);
+                $("#fitur_tambahan").val("");
+                $("#kode_fitur_tambahan").val(0);
+                $("#warna_tersedia").val("");
+                $("#kode_warna_tersedia").val(0);
+                $("#insideCOl").html("");
+            }
+
+            function EditProduct(id, product){
+                $("#staticBackdropLabel").html('<span class="text-capitalize">edit ' + product +'</span>'); //Untuk kasih judul di modal
+                $("#staticBackdrop").modal("show"); //kalo ID pake "#" kalo class pake "."
+                $.ajax({
+                    dataType: "json",
+                    url: "{{ url('/api/produk-filter/byid') }}"+"/"+id,
+                    success: function (respon) {
+                        console.log(respon)
+                        console.log(respon.data.dimensi)
+                        $("form").attr("action", "{{ url('/update-product') }}");
+                        $("#kode").val(respon.data.kode);
+                        $("#nama").val(respon.data.nama);
+                        $("#type").val(respon.data.type);
+                        $("#price").val(respon.data.price);
+                        $("#kode_price").val(respon.data.kode_price);
+                        $("#eksterior").val(respon.data.eksterior);
+                        $("#kode_eksterior").val(respon.data.kode_eksterior);
+                        $("#kapasitas_cc").val(respon.data.kapasitas_cc);
+                        $("#kode_kapasitas_cc").val(respon.data.kode_kapasitas_cc);
+                        $("#dimensi").val(respon.data.dimensi);
+                        $("#kode_dimensi").val(respon.data.kode_dimensi);
+                        $("#kapasitas_orang").val(respon.data.kapasitas_orang);
+                        $("#kode_kapasitas_orang").val(respon.data.kode_kapasitas_orang);
+                        $("#safety").val(respon.data.safety);
+                        $("#kode_safety").val(respon.data.kode_safety);
+                        $("#interior").val(respon.data.interior);
+                        $("#kode_interior").val(respon.data.kode_interior);
+                        $("#velg").val(respon.data.velg);
+                        $("#kode_velg").val(respon.data.kode_velg);
+                        $("#fitur_tambahan").val(respon.data.fitur_tambahan);
+                        $("#kode_fitur_tambahan").val(respon.data.kode_fitur_tambahan);
+                        $("#warna_tersedia").val(respon.data.warna_tersedia);
+                        $("#kode_warna_tersedia").val(respon.data.kode_warna_tersedia);
+                        $("#insideCOl").html('<input type="hidden" required name="id" value="'+respon.data.id+'">');
+                    },
+                });
+            }
+        @else
+        @endif
     </script>
 @endsection

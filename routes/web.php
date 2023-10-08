@@ -20,6 +20,7 @@ Route::get('/our-product', [MainController::class, 'just_our_product'])->name('o
 Route::get('/our-product/{nama}', [MainController::class, 'specific_product'])->name('specific_product');
 Route::post('/save-rekomendasi', [MainController::class, 'save_rekomendasi'])->name('save_rekomendasi');
 
+
 Route::get('/login', [MainController::class, 'login'])->name('login');
 Route::post('/login/checking', [MainController::class, 'login_checking'])->name('login_checking');
 // Route::post('/login/destroying', [MainController::class, 'login_destroying'])->name('login_destroying');
@@ -43,6 +44,8 @@ Route::get('/download/survey', [MainController::class, 'dw_survey'])->name('dt_s
 Route::group(['middleware' => ['auth', 'CekLevel:supervisor,sales']], function () {
     Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard');
     Route::post('/login/destroying', [MainController::class, 'login_destroying'])->name('login_destroying');
+    Route::post('/save-product', [MainController::class, 'save_product'])->name('save_product');
+    Route::post('/update-product', [MainController::class, 'update_product'])->name('update_product');
 });
 // Route::group(['middleware' => ['auth', 'CekLevel:sales']], function () {
 //     Route::post('/login/destroying', [MainController::class, 'login_destroying'])->name('login_destroying');
