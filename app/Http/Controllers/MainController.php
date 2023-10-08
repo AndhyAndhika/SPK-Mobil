@@ -10,10 +10,12 @@ use Illuminate\Http\Request;
 use App\Helpers\ApiFormatter;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class MainController extends Controller
 {
@@ -118,9 +120,175 @@ class MainController extends Controller
     }
 
     //====================['HANDLE DOWNLOAD']====================//
+    function getColumnRange()
+    {
+        $columnRange = [];
+        $letters = range('A', 'Z');
+
+        foreach ($letters as $letter) {
+            $columnRange[] = $letter;
+        }
+
+        foreach ($letters as $firstLetter) {
+            foreach ($letters as $secondLetter) {
+                $columnRange[] = $firstLetter . $secondLetter;
+            }
+        }
+
+        foreach ($letters as $firstLetter) {
+            foreach ($letters as $secondLetter) {
+                foreach ($letters as $thirdLetter) {
+                    $columnRange[] = $firstLetter . $secondLetter . $thirdLetter;
+                }
+            }
+        }
+
+        return $columnRange;
+    }
+
+    // for excel export
+    public function getLastColumn($last)
+    { //last represent how mouch X axis spaces
+        return Coordinate::stringFromColumnIndex($last);
+    }
+
     public function dw_survey()
     {
-        return Excel::download(new SurveyExport, 'HasilSurvey.xlsx');
+        ini_set('memory_limit', '-1');
+
+        // Ambil Data
+        $data = Survey::all();
+
+
+        // Judul Dalam File Excel
+        $fileName = "DATA SURVEI";
+
+        // Menentukan Header Pada File Excel
+        $columns = [
+            "#",
+            "NAMA CUSTOMER",
+            "NO HP CUSTOMER",
+            "K1",
+            "K2",
+            "K3",
+            "K4",
+            "K5",
+            "K6",
+            "K7",
+            "K8",
+            "K9",
+            "K10",
+            "K11",
+            "K12",
+            "K13",
+            "Total Nilai",
+            "Hasil Rekomendasi",
+            "Dibuat",
+            "Dirubah"
+        ];
+
+        // Menentukan jumlah baris gap antara judul dengan header
+        $row_gap = 1;
+
+        // Sytyling pada Title
+        $title_style = [
+            'font'  => [
+                'bold'  => true,
+                'size'  => 19,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ]
+        ];
+
+        $excelColumns = $this->getColumnRange();
+        $columns_count = count($columns) - 1;
+
+        // Buat Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet()->setTitle('Sheet1');
+
+        // Buat Isi dari Excel Disini
+        try {
+            $col = 1;
+            $row = 1;
+            // Set Judul
+            $sheet->setCellValue($this->getLastColumn($col) . $row, $fileName);
+            $sheet->getStyle($this->getLastColumn($col) . $row)->applyFromArray($title_style);
+            $row++;
+
+            // merge title cell
+            $sheet->mergeCells("A1:{$excelColumns[$columns_count]}1");
+
+            // Set Header
+            $row += $row_gap;
+            foreach ($columns as $column) {
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $column);
+                $sheet->getStyle($this->getLastColumn($col) . $row)->getFont()->setBold(true);
+                $col++;
+            }
+
+            $row++;
+
+            // Set Value
+            foreach ($data as $key => $item) {
+                $col = 1;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $key + 1);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->name);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->no_telp);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K1);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K2);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K3);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K4);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K5);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K6);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K7);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K8);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K9);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K10);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K11);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K12);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K13);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->total_nilai);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->hasil);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->created_at);
+                $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->updated_at);
+                $col++;
+                $row++;
+            }
+            // autosize columns width
+            foreach ($sheet->getColumnIterator() as $column) {
+                $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+            }
+        } catch (\Exception $e) {
+            dd($e);
+        }
+
+        // Save Template
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $fileName . '.xlsx' . '"');
+        $writer->save('php://output');
+
     }
 
 
