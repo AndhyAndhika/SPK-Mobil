@@ -28,16 +28,19 @@
     {{-- CONTENT ON DASHBOARD --}}
     <div class="row mt-1 mb-2">
         <div class="d-flex align-items-start">
+            {{-- BUTTON MENU SEBELAH KIRI --}}
             <div class="col-2">
                 <div class="card">
-                    <div class="card-body" style="min-height: 63.5vh">
+                    <div class="card-body " style="min-height: 63.5vh">
                         <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <button class="nav-link active" id="v-pills-Hasil-Survei-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Hasil-Survei" type="button" role="tab" aria-controls="v-pills-Hasil-Survei" aria-selected="true">Hasil Survei</button>
-                            <button class="nav-link" id="v-pills-Product-Sale-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Product-Sale" type="button" role="tab" aria-controls="v-pills-Product-Sale" aria-selected="false">Product Sale</button>
+                            <button class="nav-link text-start active" id="v-pills-Hasil-Survei-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Hasil-Survei" type="button" role="tab" aria-controls="v-pills-Hasil-Survei" aria-selected="true">Hasil Survei</button>
+                            <button class="nav-link text-start" id="v-pills-Product-Sale-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Product-Sale" type="button" role="tab" aria-controls="v-pills-Product-Sale" aria-selected="false">Product Sale</button>
+                            <button class="nav-link text-start" id="v-pills-Kriteria-Product-Sale-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Kriteria-Product-Sale" type="button" role="tab" aria-controls="v-pills-Kriteria-Product-Sale" aria-selected="false">Kriteria Product</button>
                           </div>
                     </div>
                 </div>
             </div>
+            {{-- ISI KONTEN SEBELAH KANAN --}}
             <div class="col-10">
                 <div class="card ms-1">
                     <div class="card-body" style="min-height: 63.5vh">
@@ -154,12 +157,71 @@
                                     </table>
                                 </div>
                             </div>
+                            {{-- TAB KRITERIA PRODUCT SALE --}}
+                            <div class="tab-pane fade" id="v-pills-Kriteria-Product-Sale" role="tabpanel" aria-labelledby="v-pills-Kriteria-Product-Sale-tab" tabindex="0">
+                                <div class="table-responsive">
+                                    <table id="dt_kriteria" class="table table-light table-hover table-bordered display table-responsive" style="overflow-y: scroll;">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">MODEL - TYPE</th>
+                                                <th class="text-center">K1</th>
+                                                <th class="text-center">K2</th>
+                                                <th class="text-center">K3</th>
+                                                <th class="text-center">K4</th>
+                                                <th class="text-center">K5</th>
+                                                <th class="text-center">K6</th>
+                                                <th class="text-center">K7</th>
+                                                <th class="text-center">K8</th>
+                                                <th class="text-center">K9</th>
+                                                <th class="text-center">K10</th>
+                                                <th class="text-center">K11</th>
+                                                <th class="text-center">K12</th>
+                                                <th class="text-center">K13</th>
+                                                @if (Auth::User()->role == 'supervisor')
+                                                    <th class="text-center">AKSI</th>
+                                                @else
+                                                @endif
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($Products as $item)
+                                                <tr>
+                                                    <td style="width: 500px;">{{ $item->nama }} - {{ $item->type }}</td>
+                                                    <td class="text-center">{{ $item->kode_sumber_pendapatan }}</td> {{-- "sumber_pendapatan" => 'required', // K1 --}}
+                                                    <td class="text-center">{{ $item->kode_lokasi_tinggal }}</td> {{-- "lokasi_tinggal" => 'required', // K2 --}}
+                                                    <td class="text-center">{{ $item->kode_kepemilikan_kendaraan }}</td> {{-- "kepemilikan_kendaraan" => 'required', // K3 --}}
+                                                    <td class="text-center">{{ $item->kode_price }}</td> {{-- "harga_mobil" => 'required', // K4 --}}
+                                                    <td class="text-center">{{ $item->kode_kapasitas_cc }}</td> {{-- "kapasitas_mesin" => 'required', // K5 --}}
+                                                    <td class="text-center">{{ $item->kode_kapasitas_orang }}</td> {{-- "kapasitas_penumpang" => 'required', // K6 --}}
+                                                    <td class="text-center">{{ $item->kode_safety }}</td> {{-- "keamanan_dalam_berkendara" => 'required', // K7 --}}
+                                                    <td class="text-center">{{ $item->kode_interior }}</td> {{-- "interior_mobil" => 'required', // K8 --}}
+                                                    <td class="text-center">{{ $item->kode_dimensi }}</td> {{-- "dimensi_mobil" => 'required', // K9 --}}
+                                                    <td class="text-center">{{ $item->kode_fitur_tambahan }}</td> {{-- "jumlah_keinginan_fitur_tambahan" => 'required', // K10 --}}
+                                                    <td class="text-center">{{ $item->kode_eksterior }}</td> {{-- "jumlah_keinginan_eksterior" => 'required', // K11 --}}
+                                                    <td class="text-center">{{ $item->kode_warna_tersedia }}</td> {{-- "warna_mobil" => 'required', // K12 --}}
+                                                    <td class="text-center">{{ $item->kode_velg }}</td> {{-- "jenis_velg" => 'required', // K13 --}}
+                                                    @if (Auth::User()->role == 'supervisor')
+                                                        <td class="text-center">
+                                                            <a class="btn btn-warning" onclick="EditKriteriaProduct({{ $item->id }}, '{{ $item->nama }} - {{ $item->type }}')">
+                                                                <svg height="1em" viewBox="0 0 512 512">
+                                                                    <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/>
+                                                                </svg>
+                                                            </a>
+                                                        </td>
+                                                    @else
+                                                    @endif
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                           </div>
                     </div>
                 </div>
             </div>
           </div>
-          {{-- MODAL --}}
+          {{-- MODAL ADD PRODUCT DAN EDIT--}}
           <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl">
               <div class="modal-content">
@@ -172,103 +234,117 @@
                             @csrf
                             <div class="row">
                                 <div class="col-3">
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="kode" class="form-label">Kode Product <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="kode" name="kode">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="nama" class="form-label">Nama <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="nama" name="nama">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="type" class="form-label">Type <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="type" name="type">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="price" class="form-label">Price <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="price" name="price">
+                                        <input required type="number" min="1" class="form-control" id="price" name="price">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_price" class="form-label">Kode Price <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_price" name="kode_price">
+                                        <input required type="number" min="1" class="form-control" id="kode_price" name="kode_price">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="eksterior" class="form-label">Eksterior <sup class="text-danger">*</sup> </label>
                                         <input required type="textarea" class="form-control" id="eksterior" name="eksterior">
                                     </div>
+
+                                    <div class="mb-3">
+                                        <label for="kode_lokasi_tinggal" class="form-label">Kode Lokasi Tinggal <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kode_lokasi_tinggal" name="kode_lokasi_tinggal">
+                                    </div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_eksterior" class="form-label">Kode Eksterior <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_eksterior" name="kode_eksterior">
+                                        <input required type="number" min="1" class="form-control" id="kode_eksterior" name="kode_eksterior">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="kapasitas_cc" class="form-label">Kapasitas CC <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="kapasitas_cc" name="kapasitas_cc">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_kapasitas_cc" class="form-label">Kode kapasitas CC <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_kapasitas_cc" name="kode_kapasitas_cc">
+                                        <input required type="number" min="1" class="form-control" id="kode_kapasitas_cc" name="kode_kapasitas_cc">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="dimensi" class="form-label">Dimensi <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="dimensi" name="dimensi">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_dimensi" class="form-label">Kode Dimensi <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_dimensi" name="kode_dimensi">
+                                        <input required type="number" min="1" class="form-control" id="kode_dimensi" name="kode_dimensi">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="kapasitas_orang" class="form-label">Kapasitas Orang <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="kapasitas_orang" name="kapasitas_orang">
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="kode_kepemilikan_kendaraan" class="form-label">Kode Kepemilikan Kendaraan <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kode_kepemilikan_kendaraan" name="kode_kepemilikan_kendaraan">
+                                    </div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_kapasitas_orang" class="form-label">Kode Kapasitas Orang <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_kapasitas_orang" name="kode_kapasitas_orang">
+                                        <input required type="number" min="1" class="form-control" id="kode_kapasitas_orang" name="kode_kapasitas_orang">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="safety" class="form-label">Safety <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="safety" name="safety">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_safety" class="form-label">Kode Safety <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_safety" name="kode_safety">
+                                        <input required type="number" min="1" class="form-control" id="kode_safety" name="kode_safety">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="interior" class="form-label">Interior <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="interior" name="interior">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_interior" class="form-label">Kode Interior <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_interior" name="kode_interior">
+                                        <input required type="number" min="1" class="form-control" id="kode_interior" name="kode_interior">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="velg" class="form-label">Velg <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="velg" name="velg">
                                     </div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_velg" class="form-label">Kode Velg <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_velg" name="kode_velg">
+                                        <input required type="number" min="1" class="form-control" id="kode_velg" name="kode_velg">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="fitur_tambahan" class="form-label">Fitur Tambahan <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="fitur_tambahan" name="fitur_tambahan">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_fitur_tambahan" class="form-label">Kode Fitur Tambahan <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_fitur_tambahan" name="kode_fitur_tambahan">
+                                        <input required type="number" min="1" class="form-control" id="kode_fitur_tambahan" name="kode_fitur_tambahan">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="bukankode">
                                         <label for="warna_tersedia" class="form-label">Warna Tersedia <sup class="text-danger">*</sup> </label>
                                         <input required type="text" class="form-control" id="warna_tersedia" name="warna_tersedia">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" id="kode">
                                         <label for="kode_warna_tersedia" class="form-label">Kode Warna Tersedia <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="0" class="form-control" id="kode_warna_tersedia" name="kode_warna_tersedia">
+                                        <input required type="number" min="1" class="form-control" id="kode_warna_tersedia" name="kode_warna_tersedia">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="kode_sumber_pendapatan" class="form-label">Kode Sumber Pendapatan <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kode_sumber_pendapatan" name="kode_sumber_pendapatan">
                                     </div>
                                 </div>
                                 <div id="insideCOl"></div>
@@ -286,30 +362,95 @@
               </div>
             </div>
           </div>
+          {{-- MODAL EDIT KRITERIA --}}
+          <div class="modal fade" id="kriteria-staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="kriteria-staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="kriteria-staticBackdropLabel">Modal title</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                    <div class="modal-body">
+                        <form action="{{ url('/update-kriteria-product') }}" method="POST" enctype="multipart/form-data" onsubmit="DisabledButtomSubmit()">
+                            @csrf
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="kodee_sumber_pendapatan" class="form-label">K1 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_sumber_pendapatan" name="kode_sumber_pendapatan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kodee_lokasi_tinggal" class="form-label">K2 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_lokasi_tinggal" name="kode_lokasi_tinggal">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kodee_kepemilikan_kendaraan" class="form-label">K3 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_kepemilikan_kendaraan" name="kode_kepemilikan_kendaraan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kodee_price" class="form-label">K4 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_price" name="kode_price">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="kodee_kapasitas_cc" class="form-label">K5 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_kapasitas_cc" name="kode_kapasitas_cc">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kodee_kapasitas_orang" class="form-label">K6 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_kapasitas_orang" name="kode_kapasitas_orang">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kodee_safety" class="form-label">K7 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_safety" name="kode_safety">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="kodee_interior" class="form-label">K8 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_interior" name="kode_interior">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kodee_dimensi" class="form-label">K9 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_dimensi" name="kode_dimensi">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kodee_fitur_tambahan" class="form-label">K10 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_fitur_tambahan" name="kode_fitur_tambahan">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="kodee_eksterior" class="form-label">K11 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_eksterior" name="kode_eksterior">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kodee_warna_tersedia" class="form-label">K12 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_warna_tersedia" name="kode_warna_tersedia">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kodee_velg" class="form-label">K13 <sup class="text-danger">*</sup> </label>
+                                        <input required type="number" min="1" class="form-control" id="kodee_velg" name="kode_velg">
+                                    </div>
+                                </div>
+                                <div id="insideeCOl"></div>
+                                <div class="col-12">
+                                    <button type="submit" id="submit" class="btn btn-success float-end">
+                                        <svg height="1em" viewBox="0 0 448 512">
+                                        <style>svg{fill:#ffffff}</style>
+                                        <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/>
+                                        </svg> SUBMIT
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+              </div>
+            </div>
+          </div>
     </div>
     <script>
-            var dt_hasilsurvei = $('#dt_hasilsurvei').DataTable({
-            "iDisplayLength": 5,
-            "lengthChange": false,
-            processing: true,
-            serverSide: true,
-            ajax: "{{ url('/dt-hasilsurvei') }}",
-            columns: [
-                {data: 'name', name: 'name'},
-                {data: 'no_telp', name: 'no_telp'},
-                {data: 'hasil', name: 'hasil'},
-            ]
-            });
-
-            var dt_allproduct = $('#dt_allproduct').DataTable({
-            "iDisplayLength": 5,
-            "lengthChange": false,
-            "columnDefs": [ {
-                    "targets": 12,
-                    "searchable": false
-                } ]
-            });
-
         @if (Auth::User()->role == 'supervisor')
             function AddProduct(){
                 $("#staticBackdropLabel").html('Add New Product'); //Untuk kasih judul di modal
@@ -318,26 +459,26 @@
                 $("#kode").val("");
                 $("#nama").val("");
                 $("#type").val("");
-                $("#price").val(0);
-                $("#kode_price").val(0);
+                $("#price").val(1);
+                $("#kode_price").val(1);
                 $("#eksterior").val("");
-                $("#kode_eksterior").val(0);
+                $("#kode_eksterior").val(1);
                 $("#kapasitas_cc").val("");
-                $("#kode_kapasitas_cc").val(0);
+                $("#kode_kapasitas_cc").val(1);
                 $("#dimensi").val("");
-                $("#kode_dimensi").val(0);
+                $("#kode_dimensi").val(1);
                 $("#kapasitas_orang").val("");
-                $("#kode_kapasitas_orang").val(0);
+                $("#kode_kapasitas_orang").val(1);
                 $("#safety").val("");
-                $("#kode_safety").val(0);
+                $("#kode_safety").val(1);
                 $("#interior").val("");
-                $("#kode_interior").val(0);
+                $("#kode_interior").val(1);
                 $("#velg").val("");
-                $("#kode_velg").val(0);
+                $("#kode_velg").val(1);
                 $("#fitur_tambahan").val("");
-                $("#kode_fitur_tambahan").val(0);
+                $("#kode_fitur_tambahan").val(1);
                 $("#warna_tersedia").val("");
-                $("#kode_warna_tersedia").val(0);
+                $("#kode_warna_tersedia").val(1);
                 $("#insideCOl").html("");
             }
 
@@ -355,6 +496,9 @@
                         $("#nama").val(respon.data.nama);
                         $("#type").val(respon.data.type);
                         $("#price").val(respon.data.price);
+                        $("#kode_sumber_pendapatan").val(respon.data.kode_sumber_pendapatan)
+                        $("#kode_lokasi_tinggal").val(respon.data.kode_lokasi_tinggal)
+                        $("#kode_kepemilikan_kendaraan").val(respon.data.kode_kepemilikan_kendaraan)
                         $("#kode_price").val(respon.data.kode_price);
                         $("#eksterior").val(respon.data.eksterior);
                         $("#kode_eksterior").val(respon.data.kode_eksterior);
@@ -401,7 +545,62 @@
                     alert("Berhasil Dibatalkan")
                 }
             }
+
+            function EditKriteriaProduct(id, product){
+                $("#kriteria-staticBackdropLabel").html('<span class="text-capitalize">edit kriteria ' + product +'</span>'); //Untuk kasih judul di modal
+                $("#kriteria-staticBackdrop").modal("show"); //kalo ID pake "#" kalo class pake "."
+                $.ajax({
+                    dataType: "json",
+                    url: "{{ url('/api/produk-filter/byid') }}"+"/"+id,
+                    success: function (respon) {
+                        $("#kodee_sumber_pendapatan").val(respon.data.kode_sumber_pendapatan)
+                        $("#kodee_lokasi_tinggal").val(respon.data.kode_lokasi_tinggal)
+                        $("#kodee_kepemilikan_kendaraan").val(respon.data.kode_kepemilikan_kendaraan)
+                        $("#kodee_price").val(respon.data.kode_price);
+                        $("#kodee_eksterior").val(respon.data.kode_eksterior);
+                        $("#kodee_kapasitas_cc").val(respon.data.kode_kapasitas_cc);
+                        $("#kodee_dimensi").val(respon.data.kode_dimensi);
+                        $("#kodee_kapasitas_orang").val(respon.data.kode_kapasitas_orang);
+                        $("#kodee_safety").val(respon.data.kode_safety);
+                        $("#kodee_interior").val(respon.data.kode_interior);
+                        $("#kodee_velg").val(respon.data.kode_velg);
+                        $("#kodee_fitur_tambahan").val(respon.data.kode_fitur_tambahan);
+                        $("#kodee_warna_tersedia").val(respon.data.kode_warna_tersedia);
+                        $("#insideeCOl").html('<input type="hidden" required name="id" value="'+respon.data.id+'">');
+                    },
+                });
+            }
         @else
         @endif
+        $(document).ready( function () {
+            var dt_hasilsurvei = $('#dt_hasilsurvei').DataTable({
+                "iDisplayLength": 5,
+                "lengthChange": false,
+                processing: true,
+                serverSide: true,
+                ajax: "{{ url('/dt-hasilsurvei') }}",
+                columns: [
+                    {data: 'name', name: 'name'},
+                    {data: 'no_telp', name: 'no_telp'},
+                    {data: 'hasil', name: 'hasil'},
+                ]
+            });
+
+            var dt_kriteria = $('#dt_kriteria').DataTable({
+                "iDisplayLength": 5,
+                "lengthChange": false,
+            });
+
+            var dt_allproduct = $('#dt_allproduct').DataTable({
+                "iDisplayLength": 5,
+                "lengthChange": false,
+                "columnDefs": [ {
+                        "targets": 12,
+                        "searchable": false,
+                    }],
+            });
+
+
+        });
     </script>
 @endsection

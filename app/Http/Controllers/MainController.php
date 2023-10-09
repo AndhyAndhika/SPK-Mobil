@@ -50,7 +50,7 @@ class MainController extends Controller
 
     public function save_rekomendasi(Request $request) // handle post dari form 'bantu kami' di dashboard
     {
-        dd($request);
+        // 1. Validasi untuk Menentukan Kriteria dan Bobot yang datanya didapat dari customer
         $validator = Validator::make($request->all(), [
             "nama_anda" => 'required',
             "no_telp" => 'required',
@@ -70,28 +70,45 @@ class MainController extends Controller
             "kepemilikan_kendaraan" => 'required', // K3
         ]);
 
-        $totalNilai = $request->sumber_pendapatan + $request->lokasi_tinggal + $request->kepemilikan_kendaraan + $request->harga_mobil + $request->kapasitas_mesin + $request->kapasitas_penumpang + $request->keamanan_dalam_berkendara + $request->interior_mobil + $request->dimensi_mobil + $request->jumlah_keinginan_fitur_tambahan + $request->jumlah_keinginan_eksterior + $request->warna_mobil + $request->jenis_velg;
-
-        // $perhitunganRelatif = [
-        //     "K1" => ,
-        //     "K2" => ,
-        //     "K3" => ,
-        //     "K4" => ,
-        //     "K5" => ,
-        //     "K6" => ,
-        //     "K7" => ,
-        //     "K8" => ,
-        //     "K9" => ,
-        //     "K10" => ,
-        //     "K11" => ,
-        //     "K12" => ,
-        //     "K13" =>
-        // ];
-
+        // Validasi Jika Ada data yang tidak masuk
         if ($validator->fails()) {
             Alert::toast('Harap Mengisi Form Dengan Lengkap', 'error');
             return redirect()->route('index');
         }
+
+        // Eksplode hasil dari Kapasitas mesin
+        $kapasitasMesin = explode(
+            ', ',
+            $request->kapasitas_mesin
+        );
+
+        // $totalNilai = K1 + K2 + K3 + K4 + K5 + K6...... + K13
+        $totalNilai = $request->sumber_pendapatan + $request->lokasi_tinggal + $request->kepemilikan_kendaraan + $request->harga_mobil + $kapasitasMesin[0] + $request->kapasitas_penumpang + $request->keamanan_dalam_berkendara + $request->interior_mobil + $request->dimensi_mobil + $request->jumlah_keinginan_fitur_tambahan + $request->jumlah_keinginan_eksterior + $request->warna_mobil + $request->jenis_velg;
+
+        // 2. Masukan dalam rumus Perhitungan Relatif Bobot Awal (wj)
+        $perhitunganRelatif = [
+            "K1" =>  $totalNilai / $request->sumber_pendapatan,
+            "K2" =>  $totalNilai / $request->lokasi_tinggal,
+            "K3" =>  $totalNilai / $request->kepemilikan_kendaraan,
+            "K4" =>  $totalNilai / $request->harga_mobil,
+            "K5" =>  $totalNilai / $kapasitasMesin[0],
+            "K6" =>  $totalNilai / $request->kapasitas_penumpang,
+            "K7" =>  $totalNilai / $request->keamanan_dalam_berkendara,
+            "K8" =>  $totalNilai / $request->interior_mobil,
+            "K9" =>  $totalNilai / $request->dimensi_mobil,
+            "K10" =>  $totalNilai / $request->jumlah_keinginan_fitur_tambahan,
+            "K11" =>  $totalNilai / $request->jumlah_keinginan_eksterior,
+            "K12" =>  $totalNilai / $request->warna_mobil,
+            "K13" => $totalNilai / $request->jenis_velg
+        ];
+
+        // 3. Membuat Matriks Perbandingan Alternatif dari id_tipe_mobil
+
+        $perhitunganPerbandinganMobil = [
+            'Mobil1' => "",
+            'Mobil2' => "",
+        ];
+
         Alert::toast('Terjadi Error.! Hubungi Team Program', 'error');
         return redirect()->route('index');
     }
@@ -122,6 +139,9 @@ class MainController extends Controller
             'kode_fitur_tambahan' => 'required',
             'warna_tersedia' => 'required',
             'kode_warna_tersedia' => 'required',
+            'kode_sumber_pendapatan' => 'required',
+            'kode_lokasi_tinggal' => 'required',
+            'kode_kepemilikan_kendaraan' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -153,6 +173,9 @@ class MainController extends Controller
             'kode_fitur_tambahan' => $request->kode_fitur_tambahan,
             'warna_tersedia' => $request->warna_tersedia,
             'kode_warna_tersedia' => $request->kode_warna_tersedia,
+            'kode_sumber_pendapatan' => $request->kode_sumber_pendapatan,
+            'kode_lokasi_tinggal' => $request->kode_lokasi_tinggal,
+            'kode_kepemilikan_kendaraan' => $request->kode_kepemilikan_kendaraan,
         ]);
         if ($insert) {
             Alert::toast('Input Data Berhasil', 'success');
@@ -189,6 +212,9 @@ class MainController extends Controller
             'kode_fitur_tambahan' => 'required',
             'warna_tersedia' => 'required',
             'kode_warna_tersedia' => 'required',
+            'kode_sumber_pendapatan' => 'required',
+            'kode_lokasi_tinggal' => 'required',
+            'kode_kepemilikan_kendaraan' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -220,6 +246,9 @@ class MainController extends Controller
             'kode_fitur_tambahan' => $request->kode_fitur_tambahan,
             'warna_tersedia' => $request->warna_tersedia,
             'kode_warna_tersedia' => $request->kode_warna_tersedia,
+            'kode_sumber_pendapatan' => $request->kode_sumber_pendapatan,
+            'kode_lokasi_tinggal' => $request->kode_lokasi_tinggal,
+            'kode_kepemilikan_kendaraan' => $request->kode_kepemilikan_kendaraan,
         ]);
 
         if ($insert) {
@@ -248,6 +277,54 @@ class MainController extends Controller
         return ApiFormatter::createAPi(400, 'Gagal');
     }
 
+    public function update_kriteria_product(Request $request) // Handle Edit Dari Kriteria Product
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'kode_price' => 'required',
+            'kode_eksterior' => 'required',
+            'kode_kapasitas_cc' => 'required',
+            'kode_dimensi' => 'required',
+            'kode_kapasitas_orang' => 'required',
+            'kode_safety' => 'required',
+            'kode_interior' => 'required',
+            'kode_velg' => 'required',
+            'kode_fitur_tambahan' => 'required',
+            'kode_warna_tersedia' => 'required',
+            'kode_sumber_pendapatan' => 'required',
+            'kode_lokasi_tinggal' => 'required',
+            'kode_kepemilikan_kendaraan' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            Alert::toast('Terdapat Field Yang Kosong', 'error');
+            return back();
+        }
+
+        $insert = Product::find($request->id)->update([
+            'kode_price' => $request->kode_price,
+            'kode_eksterior' => $request->kode_eksterior,
+            'kode_kapasitas_cc' => $request->kode_kapasitas_cc,
+            'kode_dimensi' => $request->kode_dimensi,
+            'kode_kapasitas_orang' => $request->kode_kapasitas_orang,
+            'kode_safety' => $request->kode_safety,
+            'kode_interior' => $request->kode_interior,
+            'kode_velg' => $request->kode_velg,
+            'kode_fitur_tambahan' => $request->kode_fitur_tambahan,
+            'kode_warna_tersedia' => $request->kode_warna_tersedia,
+            'kode_sumber_pendapatan' => $request->kode_sumber_pendapatan,
+            'kode_lokasi_tinggal' => $request->kode_lokasi_tinggal,
+            'kode_kepemilikan_kendaraan' => $request->kode_kepemilikan_kendaraan,
+        ]);
+
+        if ($insert) {
+            Alert::toast('Edit Data Berhasil', 'success');
+            return redirect()->route('dashboard');
+        }
+        Alert::toast('Terdapat Error Pada Query', 'error');
+        return back();
+    }
+
     //====================['HANDLE LOGIN']====================//
     public function login_checking(Request $request) // handle post login dan cek ketersediaan pada user
     {
@@ -263,7 +340,7 @@ class MainController extends Controller
             Alert::toast($message, 'success');
             return redirect()->route('dashboard');
         } else {
-            Alert::toast('Role is not defined!', 'error');
+            Alert::toast('Username/password Wrong!, Please Try Again!', 'error');
             return back();
         }
         return redirect()->route('login');
@@ -339,23 +416,23 @@ class MainController extends Controller
             "#",
             "NAMA CUSTOMER",
             "NO HP CUSTOMER",
-            "K1",
-            "K2",
-            "K3",
-            "K4",
-            "K5",
-            "K6",
-            "K7",
-            "K8",
-            "K9",
-            "K10",
-            "K11",
-            "K12",
-            "K13",
-            "Total Nilai",
+            // "K1",
+            // "K2",
+            // "K3",
+            // "K4",
+            // "K5",
+            // "K6",
+            // "K7",
+            // "K8",
+            // "K9",
+            // "K10",
+            // "K11",
+            // "K12",
+            // "K13",
+            // "Total Nilai",
             "Hasil Rekomendasi",
-            "Dibuat",
-            "Dirubah"
+            // "Dibuat",
+            // "Dirubah"
         ];
 
         // Menentukan jumlah baris gap antara judul dengan header
@@ -410,40 +487,40 @@ class MainController extends Controller
                 $col++;
                 $sheet->setCellValue($this->getLastColumn($col) . $row, $item->no_telp);
                 $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K1);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K2);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K3);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K4);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K5);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K6);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K7);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K8);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K9);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K10);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K11);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K12);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K13);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->total_nilai);
-                $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K1);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K2);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K3);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K4);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K5);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K6);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K7);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K8);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K9);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K10);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K11);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K12);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->K13);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->total_nilai);
+                // $col++;
                 $sheet->setCellValue($this->getLastColumn($col) . $row, $item->hasil);
                 $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->created_at);
-                $col++;
-                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->updated_at);
-                $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->created_at);
+                // $col++;
+                // $sheet->setCellValue($this->getLastColumn($col) . $row, $item->updated_at);
+                // $col++;
                 $row++;
             }
             // autosize columns width
