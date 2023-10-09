@@ -230,6 +230,24 @@ class MainController extends Controller
         return back();
     }
 
+    public function delete_product(Request $request) // Handle Request post delete
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return ApiFormatter::createAPi(400, 'Gagal');
+        }
+
+        $insert = Product::where('id', $request->id)->delete();
+        if ($insert) {
+            Alert::toast('Data berhasil dihapus', 'success');
+            return ApiFormatter::createAPi(200, 'Berhasil');
+        }
+        return ApiFormatter::createAPi(400, 'Gagal');
+    }
+
     //====================['HANDLE LOGIN']====================//
     public function login_checking(Request $request) // handle post login dan cek ketersediaan pada user
     {

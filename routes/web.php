@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth', 'CekLevel:supervisor,sales']], function (
     Route::post('/login/destroying', [MainController::class, 'login_destroying'])->name('login_destroying');
     Route::post('/save-product', [MainController::class, 'save_product'])->name('save_product');
     Route::post('/update-product', [MainController::class, 'update_product'])->name('update_product');
+    Route::post('/delete-product', [MainController::class, 'delete_product'])->name('delete_product');
 });
 // Route::group(['middleware' => ['auth', 'CekLevel:sales']], function () {
 //     Route::post('/login/destroying', [MainController::class, 'login_destroying'])->name('login_destroying');
