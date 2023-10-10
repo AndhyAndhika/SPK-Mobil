@@ -363,12 +363,13 @@
                                     raw_kapasitas_mesin: $(this).val(),
                                 },
                                 success: function(respon) {
+                                    console.log(respon)
                                     if(respon.data.length == 0 ){
                                         $("#kapasitas_penumpang").append('<option value="" disabled>Tidak ada data yang sesuai</option>');
                                     }else{
                                         $("#kapasitas_penumpang").append(' <option value="" disabled="" selected="">-- Pilih --</option>');
                                         for (let i = 0; i < respon.data.length; i++) {
-                                            $('#kapasitas_penumpang').append('<option value="' + respon.data[i].kapasitas_orang + '">' + respon.data[i].kapasitas_orang + '</option>');
+                                            $('#kapasitas_penumpang').append('<option value="' + respon.data[i].kapasitas_orang + ', '+ respon.data[i].kode_kapasitas_orang+'">' + respon.data[i].kapasitas_orang + '</option>');
                                         }
                                     }
                                 },
@@ -381,7 +382,7 @@
 
                         $('#kapasitas_penumpang').change(function(){
                             raw_kapasitas_seat = $(this).val();
-                                $("#forCheckbox").html('');
+                            $("#forCheckbox").html('');
                             $.ajax({
                                 method: "POST",
                                 dataType: "json",

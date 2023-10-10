@@ -32,8 +32,6 @@ class MainController extends Controller
     {
         $data = Pertanyaan::whereNotIn('id', [0])->get(); //Ambil semua pertanyaan kecuali yang berID = 3
         $Products = Product::GroupBy('nama')->get('nama');
-        // $image = url('/UIUX/IMG/ayla.webp');
-        // Alert::image('<i class="fs-5"> KAMI MEREKOMENDASIKAN </i> <br> <b>DAIHATSU AYLA</b>', '', "$image", 'Image Width', 'Image Height', 'Image Alt');
         return view('landing-page', compact('data', 'Products'));
     }
 
@@ -82,34 +80,95 @@ class MainController extends Controller
             $request->kapasitas_mesin
         );
 
+        // Eksplode hasil dari Kapasitas mesin
+        $kapasitasSeater = explode(
+            ', ',
+            $request->kapasitas_penumpang
+        );
+
         // $totalNilai = K1 + K2 + K3 + K4 + K5 + K6...... + K13
-        $totalNilai = $request->sumber_pendapatan + $request->lokasi_tinggal + $request->kepemilikan_kendaraan + $request->harga_mobil + $kapasitasMesin[0] + $request->kapasitas_penumpang + $request->keamanan_dalam_berkendara + $request->interior_mobil + $request->dimensi_mobil + $request->jumlah_keinginan_fitur_tambahan + $request->jumlah_keinginan_eksterior + $request->warna_mobil + $request->jenis_velg;
+        $totalNilai = $request->sumber_pendapatan + $request->lokasi_tinggal + $request->kepemilikan_kendaraan + $request->harga_mobil + $kapasitasMesin[0] + $kapasitasSeater[1] + $request->keamanan_dalam_berkendara + $request->interior_mobil + $request->dimensi_mobil + $request->jumlah_keinginan_fitur_tambahan + $request->jumlah_keinginan_eksterior + $request->warna_mobil + $request->jenis_velg;
 
         // 2. Masukan dalam rumus Perhitungan Relatif Bobot Awal (wj)
         $perhitunganRelatif = [
-            "K1" =>  $totalNilai / $request->sumber_pendapatan,
-            "K2" =>  $totalNilai / $request->lokasi_tinggal,
-            "K3" =>  $totalNilai / $request->kepemilikan_kendaraan,
-            "K4" =>  $totalNilai / $request->harga_mobil,
-            "K5" =>  $totalNilai / $kapasitasMesin[0],
-            "K6" =>  $totalNilai / $request->kapasitas_penumpang,
-            "K7" =>  $totalNilai / $request->keamanan_dalam_berkendara,
-            "K8" =>  $totalNilai / $request->interior_mobil,
-            "K9" =>  $totalNilai / $request->dimensi_mobil,
-            "K10" =>  $totalNilai / $request->jumlah_keinginan_fitur_tambahan,
-            "K11" =>  $totalNilai / $request->jumlah_keinginan_eksterior,
-            "K12" =>  $totalNilai / $request->warna_mobil,
-            "K13" => $totalNilai / $request->jenis_velg
+            "K1" =>   $request->sumber_pendapatan / $totalNilai,
+            "K2" =>   $request->lokasi_tinggal / $totalNilai,
+            "K3" =>   $request->kepemilikan_kendaraan / $totalNilai,
+            "K4" =>   $request->harga_mobil / $totalNilai,
+            "K5" =>   $kapasitasMesin[0] / $totalNilai,
+            "K6" =>   $kapasitasSeater[1] / $totalNilai,
+            "K7" =>   $request->keamanan_dalam_berkendara / $totalNilai,
+            "K8" =>   $request->interior_mobil / $totalNilai,
+            "K9" =>   $request->dimensi_mobil / $totalNilai,
+            "K10" =>   $request->jumlah_keinginan_fitur_tambahan / $totalNilai,
+            "K11" =>   $request->jumlah_keinginan_eksterior / $totalNilai,
+            "K12" =>   $request->warna_mobil / $totalNilai,
+            "K13" =>  $request->jenis_velg / $totalNilai
         ];
 
-        // 3. Membuat Matriks Perbandingan Alternatif dari id_tipe_mobil
+        // 3.Membuat Matriks Perbandingan Alternatif dari id_tipe_mobil
+        $mobil = [];
+        foreach ($request->id_tipe_mobil as $mobs) {
+            $mobil[] = Product::find($mobs);
+        }
 
-        $perhitunganPerbandinganMobil = [
-            'Mobil1' => "",
-            'Mobil2' => "",
+        // 4. Menghitung Alternatif Nilai Vektor S
+        $nilaiVektorS = [
+            'Mobil1' => ($mobil[0]->kode_sumber_pendapatan ** $perhitunganRelatif['K1']) * ($mobil[0]->kode_lokasi_tinggal ** $perhitunganRelatif['K2']) * ($mobil[0]->kode_kepemilikan_kendaraan ** $perhitunganRelatif['K3']) * ($mobil[0]->kode_price ** $perhitunganRelatif['K4']) * ($mobil[0]->kode_kapasitas_cc ** $perhitunganRelatif['K5']) * ($mobil[0]->kode_kapasitas_orang ** $perhitunganRelatif['K6']) * ($mobil[0]->kode_safety ** $perhitunganRelatif['K7']) * ($mobil[0]->kode_interior ** $perhitunganRelatif['K8']) * ($mobil[0]->kode_dimensi ** $perhitunganRelatif['K9']) * ($mobil[0]->kode_fitur_tambahan ** $perhitunganRelatif['K10']) * ($mobil[0]->kode_eksterior ** $perhitunganRelatif['K11']) * ($mobil[0]->kode_warna_tersedia ** $perhitunganRelatif['K12']) * ($mobil[0]->kode_velg ** $perhitunganRelatif['K13']),
+
+            'Mobil2' => ($mobil[1]->kode_sumber_pendapatan ** $perhitunganRelatif['K1']) * ($mobil[1]->kode_lokasi_tinggal ** $perhitunganRelatif['K2']) * ($mobil[1]->kode_kepemilikan_kendaraan ** $perhitunganRelatif['K3']) * ($mobil[1]->kode_price ** $perhitunganRelatif['K4']) * ($mobil[1]->kode_kapasitas_cc ** $perhitunganRelatif['K5']) * ($mobil[1]->kode_kapasitas_orang ** $perhitunganRelatif['K6']) * ($mobil[1]->kode_safety ** $perhitunganRelatif['K7']) * ($mobil[1]->kode_interior ** $perhitunganRelatif['K8']) * ($mobil[1]->kode_dimensi ** $perhitunganRelatif['K9']) * ($mobil[1]->kode_fitur_tambahan ** $perhitunganRelatif['K10']) * ($mobil[1]->kode_eksterior ** $perhitunganRelatif['K11']) * ($mobil[1]->kode_warna_tersedia ** $perhitunganRelatif['K12']) * ($mobil[1]->kode_velg ** $perhitunganRelatif['K13']),
         ];
 
-        Alert::toast('Terjadi Error.! Hubungi Team Program', 'error');
+        $JumlahVektorS = $nilaiVektorS['Mobil1'] + $nilaiVektorS['Mobil2'];
+
+        // 5. Menghitung Nilai Prefrensi Relatif (Vektor V)
+        $nilaiVektorV = [
+            'mobilV1' => $nilaiVektorS['Mobil1'] / $JumlahVektorS,
+            'mobilV2' => $nilaiVektorS['Mobil2'] / $JumlahVektorS
+        ];
+
+        // Mengurutkan array secara descending berdasarkan nilai
+        arsort($nilaiVektorV);
+
+        // Memberikan nilai tertinggi dari kedua array
+        if ($nilaiVektorV['mobilV1'] > $nilaiVektorV['mobilV2']) {
+            $rekomendasiMobil = $mobil[0]->id . " | " . $mobil[0]->nama . " - " . $mobil[0]->type;
+            $gambar = '/UIUX/IMG/' . $mobil[0]->nama . '.webp';
+            $namaMobil = $mobil[0]->nama . " - " . $mobil[0]->type;
+        } else {
+            $rekomendasiMobil = $mobil[1]->id . " | " . $mobil[1]->nama . " - " . $mobil[1]->type;
+            $gambar = '/UIUX/IMG/' . $mobil[1]->nama . '.webp';
+            $namaMobil = $mobil[1]->nama . " - " . $mobil[1]->type;
+        }
+
+        // Input Data ke Table Survei
+        $insert = Survey::create([
+            'name' => $request->nama_anda,
+            'no_telp' => $request->no_telp,
+            'K1' => $request->sumber_pendapatan,
+            'K2' => $request->lokasi_tinggal,
+            'K3' => $request->kepemilikan_kendaraan,
+            'K4' => $request->harga_mobil,
+            'K5' => $kapasitasMesin[0],
+            'K6' => $kapasitasSeater[1],
+            'K7' => $request->keamanan_dalam_berkendara,
+            'K8' => $request->interior_mobil,
+            'K9' => $request->dimensi_mobil,
+            'K10' => $request->jumlah_keinginan_fitur_tambahan,
+            'K11' => $request->jumlah_keinginan_eksterior,
+            'K12' => $request->warna_mobil,
+            'K13' => $request->jenis_velg,
+            'total_nilai' =>  $totalNilai,
+            'hasil' => $namaMobil,
+        ]);
+
+        if ($insert) {
+            // Ambil gambar mobil
+            $image = url($gambar);
+            Alert::image('<i class="fs-5 text-uppercase"> KAMI MEREKOMENDASIKAN </i> <br> <b>DAIHATSU ' . $namaMobil . '</b>', '', "$image", 'Image Width', 'Image Height', 'Image Alt');
+            return redirect()->route('index');
+        }
+        Alert::toast('Terdapat Error Pada Query', 'error');
         return redirect()->route('index');
     }
 
@@ -177,6 +236,7 @@ class MainController extends Controller
             'kode_lokasi_tinggal' => $request->kode_lokasi_tinggal,
             'kode_kepemilikan_kendaraan' => $request->kode_kepemilikan_kendaraan,
         ]);
+
         if ($insert) {
             Alert::toast('Input Data Berhasil', 'success');
             return redirect()->route('dashboard');
@@ -599,7 +659,7 @@ class MainController extends Controller
     {
         $dataArray = explode(", ", $request->raw_kapasitas_mesin);
         if ($dataArray[1] != null && $dataArray[2] != null) {
-            $data = Product::whereBetween('kapasitas_cc', [$dataArray[1], $dataArray[2]])->GroupBy('kapasitas_orang')->orderBy('kapasitas_orang', 'asc')->get('kapasitas_orang');
+            $data = Product::select('kapasitas_orang', 'kode_kapasitas_orang')->whereBetween('kapasitas_cc', [$dataArray[1], $dataArray[2]])->GroupBy('kapasitas_orang')->orderBy('kapasitas_orang', 'asc')->get();
             return ApiFormatter::createAPi(200, 'Berhasil', $data);
         } else {
             return ApiFormatter::createAPi(400, 'Gagal');
@@ -610,9 +670,10 @@ class MainController extends Controller
     public function filter_kapasitas_seater(Request $request)
     {
         $dataArray = explode(", ", $request->raw_kapasitas_mesin);
-        if ($dataArray[1] != null && $dataArray[2] != null && $request->raw_kapasitas_seat != null) {
+        $dataArraySeat = explode(", ", $request->raw_kapasitas_seat);
+        if ($dataArray[1] != null && $dataArray[2] != null && $dataArraySeat[0] != null) {
             $data = Product::whereBetween('kapasitas_cc', [$dataArray[1], $dataArray[2]])
-                ->where('kapasitas_orang', $request->raw_kapasitas_seat)
+                ->where('kapasitas_orang', $dataArraySeat[0])
                 // ->GroupBy('nama')
                 ->get();
             return ApiFormatter::createAPi(200, 'Berhasil', $data);
