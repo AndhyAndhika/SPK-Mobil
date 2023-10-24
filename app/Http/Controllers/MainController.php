@@ -424,7 +424,8 @@ class MainController extends Controller
     {
         $data = "";
         $Products = Product::all();
-        return view('dashboard', compact('data', 'Products'));
+        $cars =  Product::GroupBy('nama')->get('nama');
+        return view('dashboard', compact('data', 'Products', 'cars'));
     }
 
     //====================['HANDLE DOWNLOAD']====================//
