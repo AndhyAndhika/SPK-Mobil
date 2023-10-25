@@ -262,11 +262,11 @@
                                     <li class="list-unstyled">
                                         <select class="form-select" name="jenis_velg" id="jenis_velg" required="">
                                             <option value="" disabled="" selected="">-- Pilih --</option>
-                                                <option value="1">Sangat Tidak Penting</option>
+                                            {{--  <option value="1">Sangat Tidak Penting</option>
                                                 <option value="2">Tidak Penting</option>
-                                                <option value="3">Penting</option>
-                                                <option value="4">Cukup Penting</option>
-                                                <option value="5">Sangat Penting</option>
+                                                <option value="3">Penting</option> --}} 
+                                                <option value="4">Tidak Penting</option>
+                                                <option value="5">Penting</option>
                                         </select>
                                     </li>
                                 </ul>

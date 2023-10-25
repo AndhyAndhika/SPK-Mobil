@@ -474,6 +474,7 @@ class MainController extends Controller
         // Menentukan Header Pada File Excel
         $columns = [
             "#",
+            "TANGGAL",
             "NAMA CUSTOMER",
             "NO HP CUSTOMER",
             // "K1",
@@ -543,6 +544,8 @@ class MainController extends Controller
                 $col = 1;
                 $sheet->setCellValue($this->getLastColumn($col) . $row, $key + 1);
                 $col++;
+                $sheet->setCellValue($this->getLastColumn($col) . $row, $item->created_at);
+                $col++;
                 $sheet->setCellValue($this->getLastColumn($col) . $row, $item->name);
                 $col++;
                 $sheet->setCellValue($this->getLastColumn($col) . $row, $item->no_telp);
@@ -609,6 +612,12 @@ class MainController extends Controller
                 ->addColumn('action', function ($data) {
                     $btn = '<a class="btn fa-solid fa-pen-to-square fa-lg text-warning" onclick="EditReject(' . $data->id . ')"></a>';
                     return $btn;
+                })
+                ->editColumn('created_at', function ($data){
+                    $tgl = $data->created_at;
+                    $tgl = substr($tgl, 0,10);
+
+                    return $tgl;
                 })
                 ->rawColumns(['action'])
                 ->addIndexColumn()

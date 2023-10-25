@@ -53,6 +53,7 @@
                                     <table id="dt_hasilsurvei" class="table table-light table-hover table-bordered display">
                                         <thead>
                                             <tr>
+                                                <th class="text-center">Tanggal</th>
                                                 <th class="text-center">Customer Name</th>
                                                 <th class="text-center">Telp Number</th>
                                                 <th class="text-center">Our Recomended</th>
@@ -580,6 +581,7 @@
                 serverSide: true,
                 ajax: "{{ url('/dt-hasilsurvei') }}",
                 columns: [
+                    {data: 'created_at', name: 'created_at'},
                     {data: 'name', name: 'name'},
                     {data: 'no_telp', name: 'no_telp'},
                     {data: 'hasil', name: 'hasil'},
