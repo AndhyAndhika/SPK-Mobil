@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [MainController::class, 'index'])->name('index');
-// Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard');
 Route::get('/our-product', [MainController::class, 'just_our_product'])->name('our_product');
 Route::get('/our-product/{nama}', [MainController::class, 'specific_product'])->name('specific_product');
 Route::post('/save-rekomendasi', [MainController::class, 'save_rekomendasi'])->name('save_rekomendasi');

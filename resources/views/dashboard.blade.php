@@ -178,6 +178,19 @@
                                                 <th class="text-center">K11</th>
                                                 <th class="text-center">K12</th>
                                                 <th class="text-center">K13</th>
+                                                {{-- <th class="text-center">K1 - Sumber pendapatan</th>
+                                                <th class="text-center">K2 - Lokasi tinggal</th>
+                                                <th class="text-center">K3 - Kepemilikan kendaraan</th>
+                                                <th class="text-center">K4 - Harga mobil</th>
+                                                <th class="text-center">K5 - Kapasitas mesin</th>
+                                                <th class="text-center">K6 - Kapasitas penumpang</th>
+                                                <th class="text-center">K7 - Keamanan dalam berkendara</th>
+                                                <th class="text-center">K8 - Interior mobil</th>
+                                                <th class="text-center">K9 - Dimensi mobil</th>
+                                                <th class="text-center">K10 - Jumlah keinginan fitur tambahan</th>
+                                                <th class="text-center">K11 - Jumlah keinginan eksterior</th>
+                                                <th class="text-center">K12 - Warna mobil tersedia</th>
+                                                <th class="text-center">K13 - Jenis velg</th> --}}
                                                 @if (Auth::User()->role == 'supervisor')
                                                     <th class="text-center">AKSI</th>
                                                 @else
@@ -215,6 +228,18 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <table style="width: 100%">
+                                        <tr>
+                                            <th>Keterangan Nilai :</th>
+                                        </tr>
+                                        <tr>
+                                            <th>1 : Tidak Penting </th>
+                                            <th>2 : Kurang Penting </th>
+                                            <th>3 : Cukup Penting </th>
+                                            <th>4 : Penting </th>
+                                            <th>5 : Sangat Penting</th>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                           </div>
@@ -241,7 +266,23 @@
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="nama" class="form-label">Nama <sup class="text-danger">*</sup> </label>
-                                        <input required type="text" class="form-control" id="nama" name="nama">
+                                        {{-- <input required type="text" class="form-control" id="nama" name="nama"> --}}
+                                        <div id="inputtypenama">
+                                            <select class="form-select" aria-label="Default select example" required id="nama" name="nama">
+                                                <option selected>Open this select menu</option>
+                                                @foreach ($cars as $car)
+                                                    <option value="{{ $car->nama }}">{{ $car->nama }}</option>
+                                                @endforeach
+                                                <option value="etc">Dan lain lain</option>
+                                            </select>
+                                        </div>
+                                        <script>
+                                            $('#nama').on('change', function() {
+                                                if(this.value === 'etc'){
+                                                    $('#inputtypenama').html('<input required type="text" class="form-control" id="nama" name="nama" placeholder="Masukan Type Nama Mobil">')
+                                                }
+                                            });
+                                        </script>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="type" class="form-label">Type <sup class="text-danger">*</sup> </label>
@@ -253,7 +294,15 @@
                                     </div>
                                     <div class="mb-3" id="kode">
                                         <label for="kode_price" class="form-label">Kode Price <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_price" name="kode_price">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_price" name="kode_price"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_price" name="kode_price">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="eksterior" class="form-label">Eksterior <sup class="text-danger">*</sup> </label>
@@ -262,13 +311,29 @@
 
                                     <div class="mb-3">
                                         <label for="kode_lokasi_tinggal" class="form-label">Kode Lokasi Tinggal <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_lokasi_tinggal" name="kode_lokasi_tinggal">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_lokasi_tinggal" name="kode_lokasi_tinggal"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_lokasi_tinggal" name="kode_lokasi_tinggal">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3" id="kode">
                                         <label for="kode_eksterior" class="form-label">Kode Eksterior <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_eksterior" name="kode_eksterior">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_eksterior" name="kode_eksterior"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_eksterior" name="kode_eksterior">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="kapasitas_cc" class="form-label">Kapasitas CC <sup class="text-danger">*</sup> </label>
@@ -276,7 +341,15 @@
                                     </div>
                                     <div class="mb-3" id="kode">
                                         <label for="kode_kapasitas_cc" class="form-label">Kode kapasitas CC <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_kapasitas_cc" name="kode_kapasitas_cc">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_kapasitas_cc" name="kode_kapasitas_cc"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_kapasitas_cc" name="kode_kapasitas_cc">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="dimensi" class="form-label">Dimensi <sup class="text-danger">*</sup> </label>
@@ -284,7 +357,15 @@
                                     </div>
                                     <div class="mb-3" id="kode">
                                         <label for="kode_dimensi" class="form-label">Kode Dimensi <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_dimensi" name="kode_dimensi">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_dimensi" name="kode_dimensi"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_dimensi" name="kode_dimensi">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="kapasitas_orang" class="form-label">Kapasitas Orang <sup class="text-danger">*</sup> </label>
@@ -292,13 +373,29 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="kode_kepemilikan_kendaraan" class="form-label">Kode Kepemilikan Kendaraan <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_kepemilikan_kendaraan" name="kode_kepemilikan_kendaraan">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_kepemilikan_kendaraan" name="kode_kepemilikan_kendaraan"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_kepemilikan_kendaraan" name="kode_kepemilikan_kendaraan">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3" id="kode">
                                         <label for="kode_kapasitas_orang" class="form-label">Kode Kapasitas Orang <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_kapasitas_orang" name="kode_kapasitas_orang">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_kapasitas_orang" name="kode_kapasitas_orang"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_kapasitas_orang" name="kode_kapasitas_orang">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="safety" class="form-label">Safety <sup class="text-danger">*</sup> </label>
@@ -306,7 +403,15 @@
                                     </div>
                                     <div class="mb-3" id="kode">
                                         <label for="kode_safety" class="form-label">Kode Safety <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_safety" name="kode_safety">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_safety" name="kode_safety"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_safety" name="kode_safety">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="interior" class="form-label">Interior <sup class="text-danger">*</sup> </label>
@@ -314,7 +419,15 @@
                                     </div>
                                     <div class="mb-3" id="kode">
                                         <label for="kode_interior" class="form-label">Kode Interior <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_interior" name="kode_interior">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_interior" name="kode_interior"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_interior" name="kode_interior">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="velg" class="form-label">Velg <sup class="text-danger">*</sup> </label>
@@ -324,7 +437,15 @@
                                 <div class="col-3">
                                     <div class="mb-3" id="kode">
                                         <label for="kode_velg" class="form-label">Kode Velg <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_velg" name="kode_velg">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_velg" name="kode_velg"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_velg" name="kode_velg">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="fitur_tambahan" class="form-label">Fitur Tambahan <sup class="text-danger">*</sup> </label>
@@ -332,7 +453,15 @@
                                     </div>
                                     <div class="mb-3" id="kode">
                                         <label for="kode_fitur_tambahan" class="form-label">Kode Fitur Tambahan <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_fitur_tambahan" name="kode_fitur_tambahan">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_fitur_tambahan" name="kode_fitur_tambahan"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_fitur_tambahan" name="kode_fitur_tambahan">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3" id="bukankode">
                                         <label for="warna_tersedia" class="form-label">Warna Tersedia <sup class="text-danger">*</sup> </label>
@@ -340,12 +469,28 @@
                                     </div>
                                     <div class="mb-3" id="kode">
                                         <label for="kode_warna_tersedia" class="form-label">Kode Warna Tersedia <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_warna_tersedia" name="kode_warna_tersedia">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_warna_tersedia" name="kode_warna_tersedia"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_warna_tersedia" name="kode_warna_tersedia">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="kode_sumber_pendapatan" class="form-label">Kode Sumber Pendapatan <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kode_sumber_pendapatan" name="kode_sumber_pendapatan">
+                                        {{-- <input required type="number" min="1" class="form-control" id="kode_sumber_pendapatan" name="kode_sumber_pendapatan"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kode_sumber_pendapatan" name="kode_sumber_pendapatan">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div id="insideCOl"></div>
@@ -377,62 +522,166 @@
                             <div class="row">
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="kodee_sumber_pendapatan" class="form-label">K1 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_sumber_pendapatan" name="kode_sumber_pendapatan">
+                                        <label for="kodee_sumber_pendapatan" class="form-label">K1 - Sumber pendapatan<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_sumber_pendapatan" name="kode_sumber_pendapatan"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_sumber_pendapatan" name="kode_sumber_pendapatan">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="kodee_lokasi_tinggal" class="form-label">K2 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_lokasi_tinggal" name="kode_lokasi_tinggal">
+                                        <label for="kodee_lokasi_tinggal" class="form-label">K2 - Lokasi tinggal<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_lokasi_tinggal" name="kode_lokasi_tinggal"> --}}
+                                        <select class="form-select" aria-label="Default select example" required  id="kodee_lokasi_tinggal" name="kode_lokasi_tinggal">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="kodee_kepemilikan_kendaraan" class="form-label">K3 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_kepemilikan_kendaraan" name="kode_kepemilikan_kendaraan">
+                                        <label for="kodee_kepemilikan_kendaraan" class="form-label">K3 - Kepemilikan kendaraan<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_kepemilikan_kendaraan" name="kode_kepemilikan_kendaraan"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_kepemilikan_kendaraan" name="kode_kepemilikan_kendaraan">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="kodee_price" class="form-label">K4 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_price" name="kode_price">
+                                        <label for="kodee_price" class="form-label">K4 - Harga mobil<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_price" name="kode_price"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_price" name="kode_price">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="kodee_kapasitas_cc" class="form-label">K5 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_kapasitas_cc" name="kode_kapasitas_cc">
+                                        <label for="kodee_kapasitas_cc" class="form-label">K5 - Kapasitas mesin<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_kapasitas_cc" name="kode_kapasitas_cc"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_kapasitas_cc" name="kode_kapasitas_cc">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="kodee_kapasitas_orang" class="form-label">K6 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_kapasitas_orang" name="kode_kapasitas_orang">
+                                        <label for="kodee_kapasitas_orang" class="form-label">K6 - Kapasitas penumpang<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_kapasitas_orang" name="kode_kapasitas_orang"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_kapasitas_orang" name="kode_kapasitas_orang">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="kodee_safety" class="form-label">K7 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_safety" name="kode_safety">
+                                        <label for="kodee_safety" class="form-label">K7 - Keamanan dalam berkendara<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_safety" name="kode_safety"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_safety" name="kode_safety">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="kodee_interior" class="form-label">K8 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_interior" name="kode_interior">
+                                        <label for="kodee_interior" class="form-label">K8 - Interior mobil<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_interior" name="kode_interior"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_interior" name="kode_interior">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="kodee_dimensi" class="form-label">K9 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_dimensi" name="kode_dimensi">
+                                        <label for="kodee_dimensi" class="form-label">K9 - Dimensi mobil<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_dimensi" name="kode_dimensi"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_dimensi" name="kode_dimensi">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="kodee_fitur_tambahan" class="form-label">K10 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_fitur_tambahan" name="kode_fitur_tambahan">
+                                        <label for="kodee_fitur_tambahan" class="form-label">K10 - Jumlah keinginan fitur tambahan<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_fitur_tambahan" name="kode_fitur_tambahan"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_fitur_tambahan" name="kode_fitur_tambahan">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="kodee_eksterior" class="form-label">K11 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_eksterior" name="kode_eksterior">
+                                        <label for="kodee_eksterior" class="form-label">K11 - Jumlah keinginan eksterior<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_eksterior" name="kode_eksterior"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_eksterior" name="kode_eksterior">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="kodee_warna_tersedia" class="form-label">K12 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_warna_tersedia" name="kode_warna_tersedia">
+                                        <label for="kodee_warna_tersedia" class="form-label">K12 - Warna mobil tersedia<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_warna_tersedia" name="kode_warna_tersedia"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_warna_tersedia" name="kode_warna_tersedia">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="kodee_velg" class="form-label">K13 <sup class="text-danger">*</sup> </label>
-                                        <input required type="number" min="1" class="form-control" id="kodee_velg" name="kode_velg">
+                                        <label for="kodee_velg" class="form-label">K13 - Jenis velg<sup class="text-danger">*</sup> </label>
+                                        {{-- <input required type="number" min="1" class="form-control" id="kodee_velg" name="kode_velg"> --}}
+                                        <select class="form-select" aria-label="Default select example" required id="kodee_velg" name="kode_velg">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div id="insideeCOl"></div>
@@ -481,6 +730,9 @@
                 $("#warna_tersedia").val("");
                 $("#kode_warna_tersedia").val(1);
                 $("#insideCOl").html("");
+                $("#kode_kepemilikan_kendaraan").val(1);
+                $("#kode_lokasi_tinggal").val(1);
+                $("#kode_sumber_pendapatan").val(1);
             }
 
             function EditProduct(id, product){
